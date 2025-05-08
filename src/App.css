@@ -1306,3 +1306,10 @@ li {
     width: 80%;
   }
 }
+
+.summary-text {
+  font-size: 1rem; /* Adjust the font size */
+  line-height: 1.5; /* Set appropriate line height */
+  color: #4a4a4a; /* Optional: set a color */
+  margin-bottom: 1rem; /* Add some spacing at the bottom */
+}
