@@ -27,7 +27,7 @@ const HousingStats = () => {
           {
             params: {
               cubePid: "36100347", // Housing Starts
-              nPeriods: 36, // Last 3 years of monthly data
+              nPeriods: 72, // Last 3 years of monthly data
             },
           }
         );
