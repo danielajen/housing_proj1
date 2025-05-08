@@ -120,26 +120,31 @@ const Home = () => {
         </div>
       </section>
       <section class="feature-section">
-        <p>
-          FEATURED <span style={{ color: "var(--red)" }}>CAUSES</span>
-        </p>
+  <p>
+    FEATURED <span style={{ color: "var(--red)" }}>CAUSES</span>
+  </p>
 
-        <div class="featured-container">
-          {data.map((cause) => {
-            return (
-              <FeaturedCard
-                key={cause.id}
-                title={cause.title}
-                raised={cause.raised_money}
-                goal={cause.goal}
-                summary={cause.summary} // AI-generated summary
-                photourl={cause.photourl} // Placeholder for now
-                region={cause.region} // Optional field for extra data
-      />
-    );
-  })}
-</div>
-      </section>
+  <div class="featured-container">
+    <FeaturedCard
+      title="Data Transparency: Exposing Canada's Hidden Housing Crisis"
+      raised={32000}
+      goal={50000}
+      summary="We’re building clear, accessible dashboards showing key national metrics like rent inflation, home prices, and housing starts — all sourced from public data but rarely seen in one place. This empowers everyday Canadians to understand the housing crisis with evidence, not noise."
+    />
+    <FeaturedCard
+      title="Local Insight: Making Housing Data Personal"
+      raised={18000}
+      goal={30000}
+      summary="What’s happening in your city? This initiative collects and visualizes local data like homelessness rates, rental vacancy, and affordability ratios to show how housing affects people in Toronto, Vancouver, Halifax and beyond — turning numbers into personal stories."
+    />
+    <FeaturedCard
+      title="Civic Engagement: From Data to Action"
+      raised={21000}
+      goal={25000}
+      summary="Our Civic Toolkit helps users take informed action: from emailing MPs to joining tenant unions. With templates, timelines, and examples of international housing success, we’re bridging the gap between policy knowledge and real change."
+    />
+  </div>
+</section>
 
       <Slider className="w-full flex overflow-hidden">
         {reviews.map((e) => {
