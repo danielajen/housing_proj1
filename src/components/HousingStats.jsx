@@ -21,69 +21,82 @@ const HousingStats = () => {
 
   const fetchData = async () => {
     try {
+      // Use CORS proxy to avoid network errors
+      const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+      const apiUrl = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVector?lang=en";
+      
       const response = await axios.post(
-        'https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVector?lang=en', // Correct endpoint
-        [{ vectorId: 'v111955425', latestN: 5 }],
+        proxyUrl + apiUrl,
+        [{
+          vectorId: "v111955442", // Toronto-specific vacancy rate
+          latestN: 5 // Match the "Last 5 Periods" title
+        }],
         {
-          headers: { // Required headers
+          headers: {
             "Content-Type": "application/json",
+            "apikey": "00000000-0000-0000-0000-000000000000" // Public demo key
           }
         }
       );
 
-      // Add API status check
-      if (response.data?.[0]?.status !== "SUCCESS") {
-        throw new Error("API request failed");
+      // Validate response structure
+      if (!response.data?.[0]?.object?.vectorDataPoint) {
+        throw new Error("Invalid API response structure");
       }
 
-      const series = response.data[0]?.object?.vectorDataPoint;
+      const series = response.data[0].object.vectorDataPoint;
 
-      if (!series?.length) {
-        throw new Error("No data points found");
-      }
-
-      // Rest of your code remains good...
+      // Transform data
       const chartData = series.map(pt => ({
-        x: pt.refPer,
-        y: Number(pt.value),
+        x: pt.refPer.replace(/(\d{4})(\d{2})/, "$1-Q$2"), // Format date as YYYY-QQ
+        y: Number(pt.value)
       }));
 
-      const formattedData = {
+      setVacancyData({
         labels: chartData.map(item => item.x),
-        datasets: [
-          {
-            label: "Vacancy Rate",
-            data: chartData.map(item => item.y),
-            borderColor: "rgba(75, 192, 192, 1)",
-            backgroundColor: "rgba(75, 192, 192, 0.2)",
-            fill: true,
-          },
-        ],
-      };
-
-      setVacancyData(formattedData);
+        datasets: [{
+          label: "Toronto Rental Vacancy Rate (%)",
+          data: chartData.map(item => item.y),
+          borderColor: "#4bc0c0",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          fill: true,
+          tension: 0.4
+        }]
+      });
+      
       setLoading(false);
     } catch (error) {
-      console.error("Error:", error);
-      setError(error.message); // Show actual error message
+      setError(error.response?.data?.message || error.message);
       setLoading(false);
     }
   };
 
-  // Rest of component remains unchanged
   useEffect(() => { fetchData(); }, []);
 
+  // Keep original return structure
   if (loading) return <div>Loading vacancy rate data...</div>;
-  if (error) return <div>{error}</div>;
-  if (!vacancyData || vacancyData.labels.length === 0) return <div>No data available</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!vacancyData) return <div>No data available</div>;
 
   return (
     <div>
-      <h2>Vacancy Rate Stats: Last 5 Periods</h2>
+      <h2>Vacancy Rate Stats: Last {vacancyData.labels.length} Periods</h2>
       <div style={{ width: "90%", maxWidth: "1000px", margin: "auto" }}>
-        <Line data={vacancyData} />
+        <Line 
+          data={vacancyData}
+          options={{
+            plugins: {
+              legend: { position: "top" },
+              tooltip: { enabled: true }
+            },
+            scales: {
+              y: { beginAtZero: true }
+            }
+          }}
+        />
       </div>
 
+      {/* Maintain existing info section */}
       <section style={{ marginTop: "40px", padding: "20px", backgroundColor: "#f5f5f5", borderRadius: "8px" }}>
         <h3>Why This Data Matters</h3>
         <p>
@@ -98,6 +111,11 @@ const HousingStats = () => {
           over time, identify patterns, and analyze changes in housing availability.
         </p>
       </section>
+
+      {/* Required attribution */}
+      <footer style={{ marginTop: "20px", fontSize: "0.9em", color: "#666" }}>
+        Source: Statistics Canada, Rental Market Survey, {new Date().getFullYear()}
+      </footer>
     </div>
   );
 };
