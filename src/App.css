@@ -41,7 +41,7 @@
   --grey: #2e2e2f;
   --red: #f13c4a;
   --white: #ffffff;
-  --blue: #021422;
+  --blue: #177ecd;
 }
 
 * {
@@ -133,8 +133,8 @@ header {
 .logo-header {
   letter-spacing: -1px;
   font-size: 2rem;
-  color: var(--red);
-  -webkit-text-stroke: 2px var(--red);
+  color: var(--blue);
+  -webkit-text-stroke: 2px var(--blue);
   font-weight: 900;
 }
 .header-links {
@@ -160,7 +160,7 @@ header {
   font-weight: 600;
 }
 .header-links a:hover {
-  color: var(--red);
+  color: var(--blue);
   text-decoration: underline;
 }
 
@@ -183,7 +183,7 @@ header {
   height: 100%;
   min-width: 550px;
   max-height: 700px;
-  background-color: var(--red);
+  background-color: var(--blue);
   background-image: url(/public/assets/back.png);
   position: absolute;
 
@@ -294,7 +294,7 @@ span {
   transition: 0.5s ease-in-out;
 }
 .help-img:hover {
-  box-shadow: 0px 0px 30px var(--red);
+  box-shadow: 0px 0px 30px var(--blue);
 }
 .help-img img {
   height: 150px;
@@ -315,7 +315,7 @@ span {
 }
 .about-us-2 {
   width: 50%;
-  background-color: var(--red);
+  background-color: var(--blue);
   background-image: url(/public/assets/back.png);
   display: flex;
   justify-content: center;
@@ -410,7 +410,7 @@ span {
   border-start-start-radius: 40px;
   border-end-start-radius: 40px;
   height: 10px;
-  background-color: var(--red);
+  background-color: var(--blue);
 }
 .line-2 {
   width: 70%;
@@ -453,7 +453,7 @@ span {
 .testimonials {
   margin-top: 60px;
   width: 100%;
-  background-color: var(--red);
+  background-color: var(--blue);
   background-image: url(/public/assets/testimonials.png);
   height: max-content;
   padding: 50px;
