@@ -22,10 +22,11 @@ const HousingStats = () => {
 
   const fetchData = async (retries = 3) => {
     try {
+      const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+      const targetUrl = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVector";
+
       const response = await axios.post(
-        `https://corsproxy.io/?${encodeURIComponent(
-          'https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVector'
-        )}`,
+        `${proxyUrl}${targetUrl}`,
         [{
           vectorId: 'v111955442',
           latestN: 5
@@ -34,11 +35,15 @@ const HousingStats = () => {
           headers: {
             "Content-Type": "application/json",
             "apikey": "00000000-0000-0000-0000-000000000000",
-            "x-requested-with": "XMLHttpRequest"  // Required by CORS proxy
+            // Required for Heroku CORS Anywhere:
+            "X-Requested-With": "XMLHttpRequest",
+            "Origin": window.location.origin
           },
           timeout: 15000
         }
       );
+
+      
 
       if (response.data?.[0]?.status !== "SUCCESS") {
         throw new Error(response.data?.[0]?.error || "API request failed");

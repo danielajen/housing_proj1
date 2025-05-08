@@ -45,42 +45,42 @@ const Header = ({ path, User }) => {
         <ul className="scroll-auto">
           <Link to="/" className="w-[100%] lg:w-auto">
             <li>
-              <a href="#" style={{ color: path == "/" ? "red" : "" }}>
+              <a href="#" style={{ color: path == "/" ? "blue" : "" }}>
                 Home
               </a>
             </li>
           </Link>
           <Link to="/about" className="w-[100%] lg:w-auto">
             <li>
-              <a href="#" style={{ color: path == "/about" ? "red" : "" }}>
+              <a href="#" style={{ color: path == "/about" ? "blue" : "" }}>
                 About
               </a>
             </li>
           </Link>
           <Link to="/causes" className="w-[100%] lg:w-auto">
             <li>
-              <a href="#" style={{ color: path == "/causes" ? "red" : "" }}>
+              <a href="#" style={{ color: path == "/causes" ? "blue" : "" }}>
                 Causes
               </a>
             </li>
           </Link>
           <Link to="/events" className="w-[100%] lg:w-auto">
             <li>
-              <a href="#" style={{ color: path == "/events" ? "red" : "" }}>
+              <a href="#" style={{ color: path == "/events" ? "blue" : "" }}>
                 Event
               </a>
             </li>
           </Link>
           <Link to="/news" className="w-[100%] lg:w-auto">
             <li>
-              <a href="#" style={{ color: path == "/news" ? "red" : "" }}>
+              <a href="#" style={{ color: path == "/news" ? "blue" : "" }}>
                 News
               </a>
             </li>
           </Link>
           <Link to="contact" className="w-[100%] lg:w-auto">
             <li>
-              <a href="#" style={{ color: path == "/contact" ? "red" : "" }}>
+              <a href="#" style={{ color: path == "/contact" ? "blue" : "" }}>
                 Contact
               </a>
             </li>
