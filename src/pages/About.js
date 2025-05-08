@@ -34,9 +34,13 @@ const About = () => {
           <p className="text-lg text-white max-w-3xl mx-auto mb-6 text-center">
             Our vision is simple: to bring clarity and data-driven solutions to one of the most pressing issues in Canada today — the housing crisis. By accessing and analyzing data from the CMHC and Statistics Canada, we offer a comprehensive, up-to-date view of Canada’s housing trends, affordability indices, rental market data, and vacancy rates. We believe that data should be available for everyone — whether you're a policymaker, a developer, or a concerned citizen. Our tool strives to give you the information you need to make informed decisions for a better future.
           </p>
-          
-          <HousingStats /> {/* Integrating the HousingStats component to display data visualizations */}
+        </div>
 
+        {/* Integrated HousingStats Graph */}
+        <div className="w-full mt-10 flex justify-center">
+          <div className="bg-white p-8 rounded shadow-lg w-[90%] max-w-5xl">
+            <HousingStats />
+          </div>
         </div>
       </div>
 
