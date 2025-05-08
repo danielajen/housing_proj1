@@ -42,7 +42,7 @@ const Footer = () => {
               community's residents. yet many communities across Canada face rising rents, stagnant wages, and a lack of transparent
               data that reflects their lived realities and urgent needs
             </p>
-            <br />
+            <br/>
             <p>
               Our mission is to address the disconnect between housing data and real-life experiences by building an open, free, 
               and continuously maintained housing data tool that is both technically sound and socially aware.
@@ -136,7 +136,6 @@ const Footer = () => {
                 </div>
                 <div class="contact-ad">
                   <p>Vancouver, British Columbia</p>
-                  <p><Canada></Canada></p>
                 </div>
               </div>
               <div class="contact-card">
