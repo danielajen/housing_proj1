@@ -49,11 +49,11 @@ const HousingStats = () => {
         throw new Error(response.data?.[0]?.error || "API request failed");
       }
 
-      const { vectorDataPoint: series, vector: vectorInfo } = response.data[0].object;
+      const { vectorDataPoint: series } = response.data[0].object;
 
       setMetadata({
-        frequency: vectorInfo.frequencyCode,
-        geography: vectorInfo.geographyEn,
+        frequency: series[0]?.frequencyCode || "N/A",
+        geography: "Toronto, Ontario", // Hardcoded based on vectorId context
         lastUpdated: series[0]?.refPer || "N/A"
       });
 
