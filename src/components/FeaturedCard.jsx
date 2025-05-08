@@ -3,36 +3,24 @@ import { useNavigate } from "react-router-dom";
 
 const FeaturedCard = ({ raised, goal, title, img }) => {
   const nav = useNavigate();
-  const perc = raised > 0 ? Math.round((raised / goal) * 100) : 0;
-  const remPerc = 100 - perc;
+  const perc = raised > 0 ? Math.min(Math.round((raised / goal) * 100), 100) : 0;
 
-  const line1 = `w-[${perc}%]`;
-  const line2 = `w-[${remPerc}%]`;
-
-  console.log(line1 + " " + line2);
   return (
-    <div class="featured-card">
-      <div class="feature-img">
-        <img src={img} />
-        <div class="feature-bar">
-          <div class="line">
-            <span class={"line-1 " + line1}></span>
-            <span class={"line-2 " + line2}></span>
-            <p>{goal / raised}%</p>
-          </div>
+    <div className="border rounded-lg shadow-md overflow-hidden bg-white hover:shadow-lg transition duration-200">
+      <div className="relative h-48 w-full bg-gray-200">
+        <img src={img} alt={title} className="object-cover w-full h-full" />
+        <div className="absolute bottom-0 left-0 w-full bg-red-100">
+          <div className="h-2 bg-red-500" style={{ width: `${perc}%` }}></div>
         </div>
       </div>
-      <div class="feature-text">
-        <div class="stats">
-          <p>Raised: ${raised}</p>
-          <p>Goal: ${goal}</p>
+      <div className="p-4">
+        <div className="text-sm text-gray-500 mb-2">
+          Raised: ${raised.toLocaleString()} / Goal: ${goal.toLocaleString()}
         </div>
-        <div class="feature-heading">{title}</div>
+        <h3 className="text-lg font-semibold mb-3">{title}</h3>
         <button
-          onClick={() => {
-            nav("/causes");
-          }}
-          className="cursor-pointer"
+          onClick={() => nav("/causes")}
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
         >
           Donate Now
         </button>
