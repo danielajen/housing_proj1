@@ -1,10 +1,10 @@
 import React from "react";
 import "../App.css";
-import HousingStats from "../components/HousingStats"; // Importing the HousingStats component
+import HousingStats from "../components/HousingStats"; // Corrected import path
 
 const About = () => {
   React.useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo(0, 0); // Ensures the page scrolls to the top on render
   }, []);
 
   return (
