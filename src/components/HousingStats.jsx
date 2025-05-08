@@ -49,7 +49,7 @@ const HousingStats = () => {
         throw new Error(response.data?.[0]?.error || "API request failed");
       }
 
-      const { vectorDataPoint: series, vector: vectorInfo } = response.data[0].object;
+      const { dataPoints: series, vector: vectorInfo } = response.data[0].object;
 
       setMetadata({
         frequency: vectorInfo.frequencyCode,
