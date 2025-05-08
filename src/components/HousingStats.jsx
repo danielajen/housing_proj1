@@ -32,7 +32,7 @@ const HousingStats = () => {
       );
 
       // Add API status check
-      if (!response.data?.[0]?.status === "SUCCESS") {
+      if (response.data?.[0]?.status !== "SUCCESS") {
         throw new Error("API request failed");
       }
 
