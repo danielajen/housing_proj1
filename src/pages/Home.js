@@ -130,24 +130,40 @@ const Home = () => {
       raised={32000}
       goal={50000}
       summary="We’re building clear, accessible dashboards showing key national metrics like rent inflation, home prices, and housing starts — all sourced from public data but rarely seen in one place. This empowers everyday Canadians to understand the housing crisis with evidence, not noise."
-      className="summary-text"
+      style={{
+        fontSize: '0.875rem', // Smaller font size
+        lineHeight: '1.4', // Adjust line height for better readability
+        color: '#333', // Text color
+        marginBottom: '1rem', // Margin for spacing
+      }}
     />
     <FeaturedCard
       title="Local Insight: Making Housing Data Personal"
       raised={18000}
       goal={30000}
       summary="What’s happening in your city? This initiative collects and visualizes local data like homelessness rates, rental vacancy, and affordability ratios to show how housing affects people in Toronto, Vancouver, Halifax and beyond — turning numbers into personal stories."
-      className="summary-text"
+      style={{
+        fontSize: '0.875rem', // Smaller font size
+        lineHeight: '1.4', // Adjust line height for better readability
+        color: '#333', // Text color
+        marginBottom: '1rem', // Margin for spacing
+      }}
     />
     <FeaturedCard
       title="Civic Engagement: From Data to Action"
       raised={21000}
       goal={25000}
       summary="Our Civic Toolkit helps users take informed action: from emailing MPs to joining tenant unions. With templates, timelines, and examples of international housing success, we’re bridging the gap between policy knowledge and real change."
-      className="summary-text"
+      style={{
+        fontSize: '0.875rem', // Smaller font size
+        lineHeight: '1.4', // Adjust line height for better readability
+        color: '#333', // Text color
+        marginBottom: '1rem', // Margin for spacing
+      }}
     />
   </div>
 </section>
+
 
       <Slider className="w-full flex overflow-hidden">
         {reviews.map((e) => {
