@@ -1,5 +1,3 @@
-// HousingStats.js
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Line } from "react-chartjs-2";
@@ -29,7 +27,7 @@ const HousingStats = () => {
           {
             params: {
               cubePid: "36100347", // Housing Starts
-              nPeriods: 5,
+              nPeriods: 36, // Last 3 years of monthly data
             },
           }
         );
@@ -46,11 +44,11 @@ const HousingStats = () => {
     fetchData();
   }, []);
 
-  // Format data safely
+  // Format the data for the chart
   const formatData = (data) => {
-    const dataArray = data?.object;
+    const series = data?.object?.dataSeries;
 
-    if (!Array.isArray(dataArray)) {
+    if (!Array.isArray(series)) {
       console.error("Unexpected API response format:", data);
       return {
         labels: [],
@@ -58,14 +56,14 @@ const HousingStats = () => {
       };
     }
 
-    const labels = dataArray.map((item) => item.period);
-    const values = dataArray.map((item) => item.value);
+    const labels = series.map((item) => item.refPer); // e.g., "2023-01"
+    const values = series.map((item) => item.value);
 
     return {
       labels,
       datasets: [
         {
-          label: "Housing Starts",
+          label: "Monthly Housing Starts (Canada)",
           data: values,
           borderColor: "rgba(75, 192, 192, 1)",
           backgroundColor: "rgba(75, 192, 192, 0.2)",
@@ -76,14 +74,30 @@ const HousingStats = () => {
   };
 
   if (loading) return <div>Loading housing data...</div>;
-  if (!housingData) return <div>No data available</div>;
+  if (!housingData || housingData.labels.length === 0) return <div>No data available</div>;
 
   return (
     <div>
-      <h2>Housing Stats - Housing Starts (Latest Data)</h2>
-      <div style={{ width: "80%", margin: "auto" }}>
+      <h2>Housing Stats: Monthly Housing Starts (Last 3 Years)</h2>
+      <div style={{ width: "90%", maxWidth: "1000px", margin: "auto" }}>
         <Line data={housingData} />
       </div>
+
+      <section style={{ marginTop: "40px", padding: "20px", backgroundColor: "#f5f5f5", borderRadius: "8px" }}>
+        <h3>Why This Data Matters</h3>
+        <p>
+          Housing starts represent the number of new residential construction projects begun over a given period.
+          Tracking this indicator helps reveal trends in housing supply, economic health, and regional development
+          activity. By using real-time data from Statistics Canada, we aim to provide actionable insight into
+          Canada’s housing challenges and progress.
+        </p>
+
+        <h3>How to Use This Chart</h3>
+        <p>
+          Hover over any data point to see the number of housing starts in that specific month. Use this data to
+          compare trends over time, identify spikes or declines in development, and inform policy or investment decisions.
+        </p>
+      </section>
     </div>
   );
 };
