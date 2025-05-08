@@ -37,16 +37,15 @@ const Footer = () => {
           <div class="footer-about">
             <h1>OUR MISSION</h1>
             <p>
-              Bringing clean water to an Asian village is a vital and impactful
-              endeavor that can significantly improve the lives of the
-              community's residents. Access to clean and safe drinking water is
-              a fundamental human right
+              Access to safe and affordable housing is a fundamental human right
+               and endeavor that can significantly improve the lives of the
+              community's residents. yet many communities across Canada face rising rents, stagnant wages, and a lack of transparent
+              data that reflects their lived realities and urgent needs
             </p>
             <br />
             <p>
-              Initiatives focused on delivering clean water to Asian villages
-              serve as a testament to our collective responsibility in ensuring
-              a sustainable and equitable world.
+              Our mission is to address the disconnect between housing data and real-life experiences by building an open, free, 
+              and continuously maintained housing data tool that is both technically sound and socially aware.
             </p>
           </div>
 
@@ -136,8 +135,8 @@ const Footer = () => {
                   <h3>Head Office</h3>
                 </div>
                 <div class="contact-ad">
-                  <p>123, Main Street, Your City</p>
-                  <p>USA 789456</p>
+                  <p>Vancouver, British Columbia</p>
+                  <p><Canada></Canada></p>
                 </div>
               </div>
               <div class="contact-card">
@@ -148,8 +147,8 @@ const Footer = () => {
                   <h3>Phone Number</h3>
                 </div>
                 <div class="contact-ad">
-                  <p>123, Main Street, Your City</p>
-                  <p>USA 789456</p>
+                  <p>204-78 George St, Ottawa</p>
+                  <p>Canada</p>
                 </div>
               </div>
               <div class="contact-card">
@@ -160,14 +159,14 @@ const Footer = () => {
                   <h3>Email</h3>
                 </div>
                 <div class="contact-ad">
-                  <p>123, Main Street, Your City</p>
-                  <p>USA 789456</p>
+                  <p>204-78 George St, Ottawa</p>
+                  <p>Canada</p>
                 </div>
               </div>
             </div>
           </div>
           <p class="copyright">
-            Copyright @ 2023. Developed by Harshit Chadha. All Rights Reserved.
+            Copyright @ 2025. Developed by Daniel Ajenifuja. All Rights Reserved.
           </p>
         </div>
       </section>
