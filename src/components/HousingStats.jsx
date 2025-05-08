@@ -23,7 +23,9 @@ const HousingStats = () => {
   const fetchData = async (retries = 3) => {
     try {
       const response = await axios.post(
-        'https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVector',
+        `https://corsproxy.io/?${encodeURIComponent(
+          'https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVector'
+        )}`,
         [{
           vectorId: 'v111955442',
           latestN: 5
@@ -31,9 +33,10 @@ const HousingStats = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            "apikey": "00000000-0000-0000-0000-000000000000"
+            "apikey": "00000000-0000-0000-0000-000000000000",
+            "x-requested-with": "XMLHttpRequest"  // Required by CORS proxy
           },
-          timeout: 10000
+          timeout: 15000
         }
       );
 
