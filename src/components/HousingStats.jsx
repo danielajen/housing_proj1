@@ -12,7 +12,6 @@ import {
   PointElement,
 } from "chart.js";
 
-// Register chart.js components
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
 const HousingStats = () => {
@@ -20,39 +19,47 @@ const HousingStats = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Function to fetch vacancy rate data
   const fetchData = async () => {
     try {
       const response = await axios.post(
-        "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromCubePidCoordAndLatestNPeriods?lang=en",
-        [
-          {
-            productId: "3410013101",
-            coordinate: "35.2.3.0.0.0.0.0.0.0",
-            latestN: 5,
-          },
-        ]
+        'https://www150.statcan.gc.ca/t1/wds/rest/getDataFromCubePidCoordAndLatestNPeriods?lang=en',
+        [{
+          productId: '34100134',       // Valid Rental Market Survey product ID
+          coordinate: '1.1.535.0.0.0.0.0.0.0',  // Toronto CMA (535)
+          latestN: 5
+        }],
+        {
+          headers: {
+            "Content-Type": "application/json",
+          }
+        }
       );
 
-      const series = response.data[0]?.object?.vectorDataPoint;
+      // API response validation
+      if (!response.data?.[0]?.object) {
+        throw new Error("No data in API response");
+      }
+
+      const series = response.data[0].object.vectorDataPoint;
 
       if (!series || series.length === 0) {
+        console.error("No vacancy data found");
         setVacancyData(null);
         setLoading(false);
         return;
       }
 
-      const chartData = series.map((pt) => ({
+      const chartData = series.map(pt => ({
         x: pt.refPer,
         y: Number(pt.value),
       }));
 
       const formattedData = {
-        labels: chartData.map((item) => item.x),
+        labels: chartData.map(item => item.x),
         datasets: [
           {
             label: "Vacancy Rate",
-            data: chartData.map((item) => item.y),
+            data: chartData.map(item => item.y),
             borderColor: "rgba(75, 192, 192, 1)",
             backgroundColor: "rgba(75, 192, 192, 0.2)",
             fill: true,
@@ -60,29 +67,28 @@ const HousingStats = () => {
         ],
       };
 
-      setVacancyData(formattedData);  // Set the chart data in state
-      setLoading(false);              // Stop the loading state
+      setVacancyData(formattedData);
+      setLoading(false);
     } catch (error) {
-      console.error("Error fetching vacancy rate data:", error);  // Log any error that occurs
-      setError("Error fetching data. Please try again later.");   // Set an error message
-      setLoading(false);                                          // Stop the loading state
+      console.error("Error fetching vacancy rate data:", error);
+      setError(error.message || "Error fetching data. Please try again later.");
+      setLoading(false);
     }
   };
 
-  // Fetch the data when the component mounts
   useEffect(() => {
     fetchData();
-  }, []);  // Empty dependency array means this will run once when the component mounts
+  }, []);
 
-  if (loading) return <div>Loading vacancy rate data...</div>;            // Show loading message while fetching data
-  if (error) return <div>{error}</div>;                                   // Show error message if there's an error fetching data
-  if (!vacancyData || vacancyData.labels.length === 0) return <div>No data available</div>;  // Handle case of no data
+  // Keep all original return content exactly as provided
+  if (loading) return <div>Loading vacancy rate data...</div>;
+  if (error) return <div>{error}</div>;
+  if (!vacancyData || vacancyData.labels.length === 0) return <div>No data available</div>;
 
   return (
     <div>
       <h2>Vacancy Rate Stats: Last 5 Periods</h2>
       <div style={{ width: "90%", maxWidth: "1000px", margin: "auto" }}>
-        {/* Render the chart using the data from the state */}
         <Line data={vacancyData} />
       </div>
 
