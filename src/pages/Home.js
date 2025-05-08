@@ -220,7 +220,7 @@ const Home = () => {
       </Slider>
       <section class="volunteer">
         <p class="title">
-          OUR <span style={{ color: "var(--red)" }}>TEAM</span>
+          OUR <span style={{ color: "var(--red)" }}>GOAL</span>
         </p>
 
         <div class="help-container">
