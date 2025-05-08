@@ -128,14 +128,17 @@ const Home = () => {
           {data.map((cause) => {
             return (
               <FeaturedCard
+                key={cause.id}
+                title={cause.title}
                 raised={cause.raised_money}
                 goal={cause.goal}
-                title={cause.title}
-                img={cause.photourl}
-              />
-            );
-          })}
-        </div>
+                summary={cause.summary} // AI-generated summary
+                photourl={cause.photourl} // Placeholder for now
+                region={cause.region} // Optional field for extra data
+      />
+    );
+  })}
+</div>
       </section>
 
       <Slider className="w-full flex overflow-hidden">
