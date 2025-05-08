@@ -11,7 +11,7 @@ const Footer = () => {
         <div class="contact-1">
           <i class="fa fa-phone" id="call" aria-hidden="true"></i>
           <p class="question">DO YOU HAVE A QUESTION?</p>
-          <p class="number">+0123 456 789</p>
+          <p class="number">Email: faye.ying@glocalfoundation.ca</p>
         </div>
         <div class="contact-2">
           <div>
