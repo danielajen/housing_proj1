@@ -12,6 +12,7 @@ import {
   PointElement,
 } from "chart.js";
 
+// Register the necessary Chart.js components
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
 const HousingStats = () => {
@@ -22,25 +23,11 @@ const HousingStats = () => {
   const fetchData = async () => {
     try {
       const response = await axios.post(
-        'https://www150.statcan.gc.ca/t1/wds/rest/getDataFromCubePidCoordAndLatestNPeriods?lang=en',
-        [{
-          productId: '34100134',       // Valid Rental Market Survey product ID
-          coordinate: '1.1.535.0.0.0.0.0.0.0',  // Toronto CMA (535)
-          latestN: 5
-        }],
-        {
-          headers: {
-            "Content-Type": "application/json",
-          }
-        }
+        'https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVectorAndLatestNPeriods?lang=en',
+        [{ vectorId: 'v111955425', latestN: 5 }] 
       );
 
-      // API response validation
-      if (!response.data?.[0]?.object) {
-        throw new Error("No data in API response");
-      }
-
-      const series = response.data[0].object.vectorDataPoint;
+      const series = response.data[0]?.object?.vectorDataPoint;
 
       if (!series || series.length === 0) {
         console.error("No vacancy data found");
@@ -71,7 +58,7 @@ const HousingStats = () => {
       setLoading(false);
     } catch (error) {
       console.error("Error fetching vacancy rate data:", error);
-      setError(error.message || "Error fetching data. Please try again later.");
+      setError("Error fetching data. Please try again later.");
       setLoading(false);
     }
   };
@@ -80,7 +67,6 @@ const HousingStats = () => {
     fetchData();
   }, []);
 
-  // Keep all original return content exactly as provided
   if (loading) return <div>Loading vacancy rate data...</div>;
   if (error) return <div>{error}</div>;
   if (!vacancyData || vacancyData.labels.length === 0) return <div>No data available</div>;
