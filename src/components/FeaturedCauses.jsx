@@ -30,6 +30,7 @@ const FeaturedCauses = () => {
             raised={cause.raised_money}
             goal={cause.goal}
             title={cause.title}
+            summary={cause.summary}  
             img={cause.photourl}
           />
         ))}
