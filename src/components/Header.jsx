@@ -8,13 +8,13 @@ const Header = ({ path, User }) => {
   return (
     <header>
       <div class="logo-container">
-        <Link to="/">
+        <Link to="https://glocalfoundation.ca/">
           <img src="assets/ribbon.png" class="logo" />
         </Link>
         <Link to="/">
           <div class="logo-text">
-            <h1 class="logo-header">NON PROFIT</h1>
-            <p>ORGANISATION</p>
+            <h1 class="logo-header">Glocal Foundation</h1>
+            <p>Canada</p>
           </div>
         </Link>
       </div>
