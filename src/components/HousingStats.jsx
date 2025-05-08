@@ -23,12 +23,12 @@ const HousingStats = () => {
   const fetchData = async (retries = 3) => {
     try {
       const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-      const targetUrl = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVector";
+      const targetUrl = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVectorsAndLatestNPeriods";
 
       const response = await axios.post(
         `${proxyUrl}${targetUrl}`,
         [{
-          vectorId: 'v111955442',
+          vectorId: '111955442',
           latestN: 5
         }],
         {
@@ -49,7 +49,7 @@ const HousingStats = () => {
         throw new Error(response.data?.[0]?.error || "API request failed");
       }
 
-      const { dataPoints: series, vector: vectorInfo } = response.data[0].object;
+      const { vectorDataPoint: series, vector: vectorInfo } = response.data[0].object;
 
       setMetadata({
         frequency: vectorInfo.frequencyCode,
