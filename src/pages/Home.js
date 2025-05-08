@@ -60,13 +60,12 @@ const Home = () => {
         <div class="diagonal-div-2"></div>
 
         <div class="banner-text">
-          <p class="banner-heading-1">BRING CLEAN WATER TO</p>
-          <p class="banner-heading-2">AN ASIAN VILLAGE</p>
+          <p class="banner-heading-1">FIX HOUSING</p>
+          <p class="banner-heading-2">FOR ALL CANADIANS AROUND CANADA</p>
           <p class="banner-heading-3">
-            Access to clean and safe drinking water is a fundamental human
-            right, yet many villages in Asia still struggle with waterborne
-            diseases and the burden of fetching water from distant, contaminated
-            sources.
+          Access to safe and affordable housing is a fundamental human
+            right, yet yet many communities across Canada face rising rents, stagnant wages
+            wages and a lack of transparent data that reflects their lived realities and urgent needs.
           </p>
           <button
             onClick={() => {
@@ -102,7 +101,7 @@ const Home = () => {
         <div class="about-us-2">
           <div class="about-text">
             <p class="about-heading-2">WE ARE</p>
-            <p class="about-heading-2">NON-PROFIT TEAM</p>
+            <p class="about-heading-2">2 STUDENTS</p>
             <p class="about-heading-3">
               We are a team of dedicated individuals, volunteers, and supporters
               who share a common vision: to alleviate suffering, promote
@@ -115,7 +114,7 @@ const Home = () => {
                 navigate("causes");
               }}
             >
-              Donate Now
+              SUPPORT NOW
             </button>
           </div>
         </div>
