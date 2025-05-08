@@ -12,7 +12,6 @@ import {
   PointElement,
 } from "chart.js";
 
-// Register the necessary Chart.js components
 ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
 
 const HousingStats = () => {
@@ -23,19 +22,27 @@ const HousingStats = () => {
   const fetchData = async () => {
     try {
       const response = await axios.post(
-        'https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVectorAndLatestNPeriods?lang=en',
-        [{ vectorId: 'v111955425', latestN: 5 }] 
+        'https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVector?lang=en', // Correct endpoint
+        [{ vectorId: 'v111955425', latestN: 5 }],
+        {
+          headers: { // Required headers
+            "Content-Type": "application/json",
+          }
+        }
       );
+
+      // Add API status check
+      if (!response.data?.[0]?.status === "SUCCESS") {
+        throw new Error("API request failed");
+      }
 
       const series = response.data[0]?.object?.vectorDataPoint;
 
-      if (!series || series.length === 0) {
-        console.error("No vacancy data found");
-        setVacancyData(null);
-        setLoading(false);
-        return;
+      if (!series?.length) {
+        throw new Error("No data points found");
       }
 
+      // Rest of your code remains good...
       const chartData = series.map(pt => ({
         x: pt.refPer,
         y: Number(pt.value),
@@ -57,15 +64,14 @@ const HousingStats = () => {
       setVacancyData(formattedData);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching vacancy rate data:", error);
-      setError("Error fetching data. Please try again later.");
+      console.error("Error:", error);
+      setError(error.message); // Show actual error message
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // Rest of component remains unchanged
+  useEffect(() => { fetchData(); }, []);
 
   if (loading) return <div>Loading vacancy rate data...</div>;
   if (error) return <div>{error}</div>;
