@@ -20,17 +20,19 @@ const FeaturedCauses = () => {
       </div>
 
       <p className="text-lg text-gray-700 mb-6 text-center max-w-4xl mx-auto">
-        Canada’s housing crisis is not just about a shortage of units—it’s a deeper problem of affordability, data transparency, and inequality. Many dashboards are behind paywalls or ignore Indigenous, disabled, and racialized communities. We’re building a free, open, and regularly updated housing tool that bridges data and lived experience.
+        Canada’s housing crisis is not just about a shortage of units—it’s a
+        deeper problem of affordability, data transparency, and inequality. Many
+        dashboards are behind paywalls or ignore Indigenous, disabled, and
+        racialized communities. We’re building a free, open, and regularly
+        updated housing tool that bridges data and lived experience.
       </p>
 
       <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
         {data.map((cause) => (
           <FeaturedCard
             key={cause.title}
-            raised={cause.raised_money}
-            goal={cause.goal}
             title={cause.title}
-            summary={cause.summary}  
+            summary={cause.summary}
             img={cause.photourl}
           />
         ))}
