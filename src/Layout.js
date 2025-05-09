@@ -3,7 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import HeaderNav from "./components/HeaderNav";
-import UseGlobal from "./hooks/UseGlobal";
+// import UseGlobal from "./hooks/UseGlobal";
 
 const Layout = ({ User, setUser }) => {
   const { pathname } = useLocation();

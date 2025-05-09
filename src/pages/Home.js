@@ -1,244 +1,381 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import DonationCard from "../components/DonationCard";
+// import React, { useEffect, useLayoutEffect, useState } from "react";
+// import DonationCard from "../components/DonationCard";
+// import { useNavigate } from "react-router-dom";
+// import axios from "axios";
+// import Slider from "react-slick";
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
+// import FeaturedCard from "../components/FeaturedCard";
+
+// const Home = () => {
+//   React.useEffect(() => {
+//     window.scrollTo(0, 0);
+//     console.log("fdfddf");
+//   }, []);
+//   const settings = {
+//     dots: true,
+//     infinite: true,
+//     speed: 500,
+//     slidesToShow: 3,
+//     slidesToScroll: 1,
+//   };
+
+//   const [data, setdata] = useState([]);
+//   const [team, setteam] = useState([]);
+//   const [help, sethelp] = useState([]);
+//   const [reviews, setreviews] = useState([]);
+//   useEffect(() => {
+//     const getCauses = async () => {
+//       const res = await axios.get("http://localhost:8000/causes");
+//       console.log(res.data);
+//       setdata(res.data);
+//     };
+//     const getMembers = async () => {
+//       const res = await axios.get("http://localhost:8000/team_members");
+//       console.log(res.data);
+//       setteam(res.data);
+//     };
+//     const getHelp = async () => {
+//       const res = await axios.get("http://localhost:8000/help");
+//       console.log(res.data);
+//       sethelp(res.data);
+//     };
+//     const getReviews = async () => {
+//       const res = await axios.get("http://localhost:8000/reviews/joined");
+//       console.log(res.data, "reviews");
+//       setreviews(res.data);
+//     };
+//     console.log(team);
+//     getCauses();
+//     getReviews();
+//     getMembers();
+//     getHelp();
+//   }, []);
+
+//   const navigate = useNavigate();
+//   return (
+//     <div>
+//       <section class="banner-1">
+//         <div class="diagonal-div"></div>
+//         <div class="diagonal-div-2"></div>
+
+//         <div class="banner-text">
+//           <p class="banner-heading-1">FIX HOUSING</p>
+//           <p class="banner-heading-2">FOR ALL CANADIANS AROUND CANADA</p>
+//           <p class="banner-heading-3">
+//           Access to safe and affordable housing is a fundamental human
+//             right, yet yet many communities across Canada face rising rents, stagnant wages
+//             wages and a lack of transparent data that reflects their lived realities and urgent needs.
+//           </p>
+//           <button
+//             onClick={() => {
+//               navigate("causes");
+//             }}
+//           >
+//             Donate Now
+//           </button>
+//         </div>
+//       </section>
+//       <section class="help-section">
+//         <p>
+//           HOW COULD <span style={{ color: "var(--red)" }}>YOU HELP ?</span>
+//         </p>
+//         <div class="help-container">
+//           {help.map((e) => {
+//             return (
+//               <div class="cards">
+//                 <div class="help-img">
+//                   <img src={e.photourl} />
+//                 </div>
+//                 <h1>{e.title}</h1>
+//                 <p>{e.descr}</p>
+//               </div>
+//             );
+//           })}
+//         </div>
+//       </section>
+//       <section class="about-us">
+//         <div class="about-us-1">
+//           <img src="assets/about.png" />
+//         </div>
+//         <div class="about-us-2">
+//           <div class="about-text">
+//             <p class="about-heading-2">WE ARE</p>
+//             <p class="about-heading-2">2 STUDENTS</p>
+//             <p class="about-heading-3">
+//               We are a team of dedicated individuals, volunteers, and supporters
+//               who share a common vision: to alleviate suffering, promote
+//               equality, and uplift communities. With unwavering determination
+//               and a heartfelt passion for change, we have undertaken numerous
+//               projects and initiatives.
+//             </p>
+//             <button
+//               onClick={() => {
+//                 navigate("causes");
+//               }}
+//             >
+//               SUPPORT NOW
+//             </button>
+//           </div>
+//         </div>
+//       </section>
+//       <section class="feature-section">
+//   <p>
+//     FEATURED <span style={{ color: "var(--red)" }}>CAUSES</span>
+//   </p>
+
+//   <div class="featured-container">
+//     <FeaturedCard
+//       title="Data Transparency: Exposing Canada's Hidden Housing Crisis"
+//       raised={32000}
+//       goal={50000}
+//       summary="We’re building clear, accessible dashboards showing key national metrics like rent inflation, home prices, and housing starts — all sourced from public data but rarely seen in one place. This empowers everyday Canadians to understand the housing crisis with evidence, not noise."
+//       style={{
+//         fontSize: '0.875rem', // Smaller font size
+//         lineHeight: '1.4', // Adjust line height for better readability
+//         color: '#333', // Text color
+//         marginBottom: '1rem', // Margin for spacing
+//       }}
+//     />
+//     <FeaturedCard
+//       title="Local Insight: Making Housing Data Personal"
+//       raised={18000}
+//       goal={30000}
+//       summary="What’s happening in your city? This initiative collects and visualizes local data like homelessness rates, rental vacancy, and affordability ratios to show how housing affects people in Toronto, Vancouver, Halifax and beyond — turning numbers into personal stories."
+//       style={{
+//         fontSize: '0.875rem', // Smaller font size
+//         lineHeight: '1.4', // Adjust line height for better readability
+//         color: '#333', // Text color
+//         marginBottom: '1rem', // Margin for spacing
+//       }}
+//     />
+//     <FeaturedCard
+//       title="Civic Engagement: From Data to Action"
+//       raised={21000}
+//       goal={25000}
+//       summary="Our Civic Toolkit helps users take informed action: from emailing MPs to joining tenant unions. With templates, timelines, and examples of international housing success, we’re bridging the gap between policy knowledge and real change."
+//       style={{
+//         fontSize: '0.875rem', // Smaller font size
+//         lineHeight: '1.4', // Adjust line height for better readability
+//         color: '#333', // Text color
+//         marginBottom: '1rem', // Margin for spacing
+//       }}
+//     />
+//   </div>
+// </section>
+
+
+//       <Slider className="w-full flex overflow-hidden">
+//         {reviews.map((e) => {
+//           return (
+//             <section class="testimonials">
+//               <h1>WHAT TEAM SAYS</h1>
+
+//               <div class="dialog">
+//                 <img src="assets/quotes.png" />
+//                 <p style={{ marginBottom: "30px" }}>{e.review_text}</p>
+
+//                 <div class="triangle"></div>
+//                 <div className="w-full 0  flex iconT justify-center items-center p-6">
+//                   <img src={e.photoUrl} className="rounded-full" />
+//                 </div>
+//                 <div>
+//                   <span>
+//                     <span style={{ color: "var(--red)" }}>
+//                       {e.first_name} {e.last_name}
+//                     </span>{" "}
+//                     | {e.role}
+//                   </span>
+//                 </div>
+//               </div>
+//             </section>
+//           );
+//         })}
+//         {/* <section class="testimonials">
+//           <h1>WHAT PEOPLE SAY</h1>
+
+//           <div class="dialog">
+//             <img src="assets/quotes.png" />
+//             <p style={{ marginBottom: "30px" }}>
+//               People say that life is a journey, and along the way, we encounter
+//               joys, sorrows, and countless moments that shape our stories. What
+//               we say and do, the connections we make, and the impact we leave on
+//               the world are all part of this beautiful narrative
+//             </p>
+
+//             <div class="triangle"></div>
+//             <span>
+//               <span style={{ color: "var(--red)" }}>JOHN DOE</span> | NGO
+//             </span>
+//           </div>
+
+//           <div class="test-photos">
+//             <img src="assets/test1.png" />
+//             <img src="assets/test2.png" />
+//             <img src="assets/test3.png" />
+//             <img src="assets/test4.png" class="display" />
+//             <img src="assets/test5.png" class="display" />
+//           </div>
+//         </section> */}
+//       </Slider>
+//       <section class="volunteer">
+//         <p class="title">
+//           OUR <span style={{ color: "var(--red)" }}>GOAL</span>
+//         </p>
+
+//         <div class="help-container">
+//           {team.map((data) => {
+//             return (
+//               <div class="cards">
+//                 <div class="help-img">
+//                   <img src={data.photoUrl} />
+//                 </div>
+//                 <h1>
+//                   {data.first_name} {data.last_name}
+//                 </h1>
+//                 <p>{data.role}</p>
+//               </div>
+//             );
+//           })}
+//         </div>
+//       </section>
+//     </div>
+//   );
+// };
+
+// export default Home;
+
+
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import FeaturedCard from "../components/FeaturedCard";
+import "../App.css";
 
 const Home = () => {
   React.useEffect(() => {
     window.scrollTo(0, 0);
-    console.log("fdfddf");
-  }, []);
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-  };
-
-  const [data, setdata] = useState([]);
-  const [team, setteam] = useState([]);
-  const [help, sethelp] = useState([]);
-  const [reviews, setreviews] = useState([]);
-  useEffect(() => {
-    const getCauses = async () => {
-      const res = await axios.get("http://localhost:8000/causes");
-      console.log(res.data);
-      setdata(res.data);
-    };
-    const getMembers = async () => {
-      const res = await axios.get("http://localhost:8000/team_members");
-      console.log(res.data);
-      setteam(res.data);
-    };
-    const getHelp = async () => {
-      const res = await axios.get("http://localhost:8000/help");
-      console.log(res.data);
-      sethelp(res.data);
-    };
-    const getReviews = async () => {
-      const res = await axios.get("http://localhost:8000/reviews/joined");
-      console.log(res.data, "reviews");
-      setreviews(res.data);
-    };
-    console.log(team);
-    getCauses();
-    getReviews();
-    getMembers();
-    getHelp();
   }, []);
 
   const navigate = useNavigate();
-  return (
-    <div>
-      <section class="banner-1">
-        <div class="diagonal-div"></div>
-        <div class="diagonal-div-2"></div>
 
-        <div class="banner-text">
-          <p class="banner-heading-1">FIX HOUSING</p>
-          <p class="banner-heading-2">FOR ALL CANADIANS AROUND CANADA</p>
-          <p class="banner-heading-3">
-          Access to safe and affordable housing is a fundamental human
-            right, yet yet many communities across Canada face rising rents, stagnant wages
-            wages and a lack of transparent data that reflects their lived realities and urgent needs.
+  return (
+    <div className="flex flex-col">
+      {/* Hero Section */}
+      <div className="w-full bg-[#1a365d] text-white py-20 px-4">
+        <div className="max-w-6xl mx-auto text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">
+            Canada's Housing Crisis - By The Numbers
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto">
+            A data-driven platform bringing transparency to Canada's housing market.
+            Explore real statistics, understand local impacts, and take action for change.
           </p>
-          <button
-            onClick={() => {
-              navigate("causes");
-            }}
+          <button 
+            onClick={() => navigate("/data")}
+            className="bg-[var(--red)] hover:bg-[var(--dark-red)] text-white font-bold py-3 px-8 rounded-lg text-lg"
           >
-            Donate Now
+            Explore Housing Data
           </button>
         </div>
-      </section>
-      <section class="help-section">
-        <p>
-          HOW COULD <span style={{ color: "var(--red)" }}>YOU HELP ?</span>
-        </p>
-        <div class="help-container">
-          {help.map((e) => {
-            return (
-              <div class="cards">
-                <div class="help-img">
-                  <img src={e.photourl} />
-                </div>
-                <h1>{e.title}</h1>
-                <p>{e.descr}</p>
-              </div>
-            );
-          })}
+      </div>
+
+      {/* Three Pillars Section */}
+      <div className="w-full bg-white py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Our Approach to Housing Solutions
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Data Transparency */}
+            <div className="p-6 border border-gray-200 rounded-lg">
+              <div className="text-[var(--red)] text-4xl mb-4">01</div>
+              <h3 className="text-xl font-bold mb-3">Data Transparency</h3>
+              <p className="text-gray-700">
+                We aggregate housing data from trusted sources like CMHC and Statistics Canada,
+                presenting it in clear, accessible visualizations that reveal the real state
+                of Canada's housing market.
+              </p>
+            </div>
+            
+            {/* Localized Insight */}
+            <div className="p-6 border border-gray-200 rounded-lg">
+              <div className="text-[var(--red)] text-4xl mb-4">02</div>
+              <h3 className="text-xl font-bold mb-3">Localized Insight</h3>
+              <p className="text-gray-700">
+                Understand how housing affects your specific community with city and 
+                neighborhood-level data on affordability, vacancy rates, and more.
+              </p>
+            </div>
+            
+            {/* Civic Engagement */}
+            <div className="p-6 border border-gray-200 rounded-lg">
+              <div className="text-[var(--red)] text-4xl mb-4">03</div>
+              <h3 className="text-xl font-bold mb-3">Civic Engagement</h3>
+              <p className="text-gray-700">
+                Turn knowledge into action with tools to contact policymakers, 
+                join advocacy groups, and support housing solutions.
+              </p>
+            </div>
+          </div>
         </div>
-      </section>
-      <section class="about-us">
-        <div class="about-us-1">
-          <img src="assets/about.png" />
+      </div>
+
+      {/* Problem Statement Section */}
+      <div className="w-full bg-gray-100 py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-8">
+            Why Housing Data Matters
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <p className="text-lg mb-6">
+                Canada faces an unprecedented housing crisis, with rising rents, stagnant wages, 
+                and a growing gap between housing supply and demand. Yet much of the data that could 
+                help solve these problems remains locked away in government spreadsheets and academic reports.
+              </p>
+              <p className="text-lg mb-6">
+                Our platform makes this data freely accessible, helping Canadians understand:
+              </p>
+              <ul className="list-disc pl-5 space-y-2">
+                <li>How housing costs compare to incomes in their community</li>
+                <li>Where new housing is (and isn't) being built</li>
+                <li>How vacancy rates affect rental prices</li>
+                <li>What policy solutions have worked elsewhere</li>
+              </ul>
+            </div>
+            <div className="bg-gray-200 h-64 md:h-96 rounded-lg flex items-center justify-center">
+              <span className="text-gray-500">[Infographic placeholder]</span>
+            </div>
+          </div>
         </div>
-        <div class="about-us-2">
-          <div class="about-text">
-            <p class="about-heading-2">WE ARE</p>
-            <p class="about-heading-2">2 STUDENTS</p>
-            <p class="about-heading-3">
-              We are a team of dedicated individuals, volunteers, and supporters
-              who share a common vision: to alleviate suffering, promote
-              equality, and uplift communities. With unwavering determination
-              and a heartfelt passion for change, we have undertaken numerous
-              projects and initiatives.
-            </p>
-            <button
-              onClick={() => {
-                navigate("causes");
-              }}
+      </div>
+
+      {/* Call to Action */}
+      <div className="w-full bg-[var(--red)] text-white py-16 px-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-6">
+            Ready to explore Canada's housing data?
+          </h2>
+          <p className="text-xl mb-8">
+            Start with our national overview or jump straight to your city's data.
+          </p>
+          <div className="flex flex-col md:flex-row justify-center gap-4">
+            <button 
+              onClick={() => navigate("/data")}
+              className="bg-white hover:bg-gray-100 text-[var(--red)] font-bold py-3 px-8 rounded-lg"
             >
-              SUPPORT NOW
+              View National Data
+            </button>
+            <button 
+              onClick={() => navigate("/local")}
+              className="border-2 border-white hover:bg-white hover:text-[var(--red)] font-bold py-3 px-8 rounded-lg"
+            >
+              Find Local Insights
             </button>
           </div>
         </div>
-      </section>
-      <section class="feature-section">
-  <p>
-    FEATURED <span style={{ color: "var(--red)" }}>CAUSES</span>
-  </p>
-
-  <div class="featured-container">
-    <FeaturedCard
-      title="Data Transparency: Exposing Canada's Hidden Housing Crisis"
-      raised={32000}
-      goal={50000}
-      summary="We’re building clear, accessible dashboards showing key national metrics like rent inflation, home prices, and housing starts — all sourced from public data but rarely seen in one place. This empowers everyday Canadians to understand the housing crisis with evidence, not noise."
-      style={{
-        fontSize: '0.875rem', // Smaller font size
-        lineHeight: '1.4', // Adjust line height for better readability
-        color: '#333', // Text color
-        marginBottom: '1rem', // Margin for spacing
-      }}
-    />
-    <FeaturedCard
-      title="Local Insight: Making Housing Data Personal"
-      raised={18000}
-      goal={30000}
-      summary="What’s happening in your city? This initiative collects and visualizes local data like homelessness rates, rental vacancy, and affordability ratios to show how housing affects people in Toronto, Vancouver, Halifax and beyond — turning numbers into personal stories."
-      style={{
-        fontSize: '0.875rem', // Smaller font size
-        lineHeight: '1.4', // Adjust line height for better readability
-        color: '#333', // Text color
-        marginBottom: '1rem', // Margin for spacing
-      }}
-    />
-    <FeaturedCard
-      title="Civic Engagement: From Data to Action"
-      raised={21000}
-      goal={25000}
-      summary="Our Civic Toolkit helps users take informed action: from emailing MPs to joining tenant unions. With templates, timelines, and examples of international housing success, we’re bridging the gap between policy knowledge and real change."
-      style={{
-        fontSize: '0.875rem', // Smaller font size
-        lineHeight: '1.4', // Adjust line height for better readability
-        color: '#333', // Text color
-        marginBottom: '1rem', // Margin for spacing
-      }}
-    />
-  </div>
-</section>
-
-
-      <Slider className="w-full flex overflow-hidden">
-        {reviews.map((e) => {
-          return (
-            <section class="testimonials">
-              <h1>WHAT TEAM SAYS</h1>
-
-              <div class="dialog">
-                <img src="assets/quotes.png" />
-                <p style={{ marginBottom: "30px" }}>{e.review_text}</p>
-
-                <div class="triangle"></div>
-                <div className="w-full 0  flex iconT justify-center items-center p-6">
-                  <img src={e.photoUrl} className="rounded-full" />
-                </div>
-                <div>
-                  <span>
-                    <span style={{ color: "var(--red)" }}>
-                      {e.first_name} {e.last_name}
-                    </span>{" "}
-                    | {e.role}
-                  </span>
-                </div>
-              </div>
-            </section>
-          );
-        })}
-        {/* <section class="testimonials">
-          <h1>WHAT PEOPLE SAY</h1>
-
-          <div class="dialog">
-            <img src="assets/quotes.png" />
-            <p style={{ marginBottom: "30px" }}>
-              People say that life is a journey, and along the way, we encounter
-              joys, sorrows, and countless moments that shape our stories. What
-              we say and do, the connections we make, and the impact we leave on
-              the world are all part of this beautiful narrative
-            </p>
-
-            <div class="triangle"></div>
-            <span>
-              <span style={{ color: "var(--red)" }}>JOHN DOE</span> | NGO
-            </span>
-          </div>
-
-          <div class="test-photos">
-            <img src="assets/test1.png" />
-            <img src="assets/test2.png" />
-            <img src="assets/test3.png" />
-            <img src="assets/test4.png" class="display" />
-            <img src="assets/test5.png" class="display" />
-          </div>
-        </section> */}
-      </Slider>
-      <section class="volunteer">
-        <p class="title">
-          OUR <span style={{ color: "var(--red)" }}>GOAL</span>
-        </p>
-
-        <div class="help-container">
-          {team.map((data) => {
-            return (
-              <div class="cards">
-                <div class="help-img">
-                  <img src={data.photoUrl} />
-                </div>
-                <h1>
-                  {data.first_name} {data.last_name}
-                </h1>
-                <p>{data.role}</p>
-              </div>
-            );
-          })}
-        </div>
-      </section>
+      </div>
     </div>
   );
 };

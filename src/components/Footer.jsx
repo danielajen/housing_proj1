@@ -49,7 +49,7 @@ const Footer = () => {
             </p>
           </div>
 
-          <div class="footer-links">
+          {/* <div class="footer-links">
             <h2
               class="links"
               onClick={() => {
@@ -85,7 +85,7 @@ const Footer = () => {
                 <Link to="contact">Contact</Link>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           <div class="gallery">
             <h2
@@ -165,7 +165,7 @@ const Footer = () => {
             </div>
           </div>
           <p class="copyright">
-            Copyright @ 2025. Developed by Daniel Ajenifuja. All Rights Reserved.
+            Copyright @ 2025 All Rights Reserved.
           </p>
         </div>
       </section>
@@ -174,3 +174,6 @@ const Footer = () => {
 };
 
 export default Footer;
+
+
+
