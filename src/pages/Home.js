@@ -260,7 +260,7 @@ const Home = () => {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <div className="w-full bg-[#1a365d] text-white py-20 px-4">
+      {/* <div className="w-full bg-[#1a365d] text-white py-20 px-4">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
             Canada's Housing Crisis - By The Numbers
@@ -276,7 +276,27 @@ const Home = () => {
             Explore Housing Data
           </button>
         </div>
-      </div>
+      </div> */}
+
+      <div 
+  className="w-full bg-[#1a365d] text-white py-20 px-4 relative bg-cover bg-center"
+  style={{ backgroundImage: "url(/assets/main-banner.png)" }}
+>
+  {/* Optional overlay to improve text readability if needed */}
+  <div className="absolute inset-0 bg-[#1a365d]/70"></div>
+  
+  <div className="max-w-6xl mx-auto text-center relative z-10">
+    <h1 className="text-4xl md:text-6xl font-bold mb-6">
+      Canada's Housing Crisis - By The Numbers
+    </h1>
+    <p className="text-xl md:text-2xl mb-8">
+      A data-driven platform bringing transparency to Canada's housing market. Explore real statistics, understand local impacts, and take action for change.
+    </p>
+    <button className="bg-white text-[#1a365d] font-bold py-3 px-6 rounded-lg hover:bg-gray-100 transition">
+      Explore Housing Data
+    </button>
+  </div>
+</div>
 
       {/* Three Pillars Section */}
       <div className="w-full bg-white py-16 px-4">
@@ -344,9 +364,17 @@ const Home = () => {
                 <li>What policy solutions have worked elsewhere</li>
               </ul>
             </div>
-            <div className="bg-gray-200 h-64 md:h-96 rounded-lg flex items-center justify-center">
+            {/* <div className="bg-gray-200 h-64 md:h-96 rounded-lg flex items-center justify-center">
               <span className="text-gray-500">[Infographic placeholder]</span>
-            </div>
+            </div> */}
+            <div className="bg-gray-200 h-64 md:h-96 rounded-lg flex items-center justify-center overflow-hidden">
+  <img
+    src="/assets/about.png"
+    alt="Infographic"
+    className="object-cover h-full w-full"
+  />
+</div>
+
           </div>
         </div>
       </div>
