@@ -1,66 +1,152 @@
 import React from "react";
+// import HousingStats from "../components/HousingStats";
 import "../App.css";
-import HousingStats from "../components/HousingStats"; // Corrected import path
 
 const About = () => {
   React.useEffect(() => {
-    window.scrollTo(0, 0); // Ensures the page scrolls to the top on render
+    window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div className="flex flex-col">
-      {/* Banner Section */}
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      {/* Banner */}
       <div
-        className="flex justify-center items-start w-full h-[320px] bg-cover bg-no-repeat bg-right md:bg-center p-5"
-        id="about-banner"
+        style={{
+          backgroundImage: "url('/assets/main-banner.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center right",
+          color: "white",
+          padding: "60px 20px",
+          minHeight: "320px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+        }}
       >
-        <div className="flex flex-col w-[90%] md:w-[50%] h-full justify-around text-center text-gray-100">
-          <h1 className="text-6xl tracking-tighter font-sans">
+        <div style={{ maxWidth: "900px" }}>
+          <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "20px" }}>
             About Us — Bridging Data and Housing Solutions
           </h1>
-          <p className="text-gray-200">
-            Our mission is to provide transparency, accessibility, and actionable insights into Canada's housing market. By collecting, analyzing, and visualizing data from trusted sources such as the Canada Mortgage and Housing Corporation (CMHC), Statistics Canada, and provincial databases, we are committed to empowering communities and stakeholders with critical knowledge. 
-            Through our dynamic, interactive platform, we aim to contribute to resolving Canada's housing challenges, making housing more affordable, sustainable, and accessible for all.
+          <p style={{ fontSize: "1.1rem", lineHeight: "1.7" }}>
+            Our mission is to provide transparency, accessibility, and actionable insights into Canada's housing market.
+            We collect, analyze, and visualize data from trusted sources such as CMHC, Statistics Canada, and provincial open data.
+            Our platform empowers residents, advocates, and researchers to act with informed confidence.
           </p>
         </div>
       </div>
 
-      {/* Content Section */}
-      <div className="w-full bg-[var(--red)] py-10 pb-[100px] flex-col justify-around items-center">
-        <h1 className="text-center text-2xl tracking-tighter font-bold text-white">
+      {/* Vision Section */}
+      <div style={{ backgroundColor: "#dc2626", color: "white", padding: "60px 20px" }}>
+        <h2 style={{ textAlign: "center", fontSize: "2rem", fontWeight: "bold", marginBottom: "20px" }}>
           Our Vision for Housing in Canada
-        </h1>
-        <div className="flex flex-wrap flex-col sm:flex-row items-center mt-7 gap-5 w-full justify-around">
-          <p className="text-lg text-white max-w-3xl mx-auto mb-6 text-center">
-            Our vision is simple: to bring clarity and data-driven solutions to one of the most pressing issues in Canada today — the housing crisis. By accessing and analyzing data from the CMHC and Statistics Canada, we offer a comprehensive, up-to-date view of Canada’s housing trends, affordability indices, rental market data, and vacancy rates. We believe that data should be available for everyone — whether you're a policymaker, a developer, or a concerned citizen. Our tool strives to give you the information you need to make informed decisions for a better future.
-          </p>
-        </div>
-
-        {/* Integrated HousingStats Graph */}
-        <div className="w-full mt-10 flex justify-center">
-          <div className="bg-white p-8 rounded shadow-lg w-[90%] max-w-5xl">
-            <HousingStats />
-          </div>
-        </div>
-      </div>
-
-      {/* Additional Section */}
-      <div className="flex flex-col items-center bg-gray-100 py-10">
-        <h2 className="text-3xl font-bold mb-4 text-center">
-          Why Housing Data Matters
         </h2>
-        <p className="text-lg text-gray-700 mb-6 text-center max-w-3xl mx-auto">
-          Housing is more than just shelter — it’s about stability, opportunity, and dignity. However, the rising costs, accessibility barriers, and complex issues surrounding housing in Canada have left many communities vulnerable. By providing transparent, real-time data, we seek to shed light on the underlying issues that affect the housing market. This includes zoning laws, building permits, homelessness statistics, and much more. Our aim is to bridge the gap between data, lived experience, and effective policy solutions.
+        <p style={{
+          maxWidth: "900px",
+          margin: "0 auto",
+          textAlign: "center",
+          fontSize: "1.1rem",
+          lineHeight: "1.8"
+        }}>
+          Our vision is simple: to bring clarity and data-driven solutions to one of Canada’s most urgent issues — the housing crisis.
+          Using CMHC and StatCan datasets, we offer an up-to-date view of trends in affordability, construction, rental markets, and vacancy rates.
+          This platform supports policymakers, researchers, tenants, and activists alike — with zero cost and zero technical barrier.
         </p>
 
-        {/* Encourage further engagement */}
-        <div className="w-full text-center">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">
+        {/* Chart container (commented properly) */}
+        {/*
+        <div style={{
+          marginTop: "40px",
+          marginBottom: "0px",
+          backgroundColor: "white",
+          padding: "30px",
+          borderRadius: "12px",
+          maxWidth: "900px",
+          marginLeft: "auto",
+          marginRight: "auto",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.1)"
+        }}>
+          <HousingStats />
+        </div>
+        */}
+      </div>
+
+      {/* Why Housing Data Matters */}
+      <div style={{ backgroundColor: "#f3f4f6", padding: "60px 20px" }}>
+        <div style={{ maxWidth: "1000px", margin: "0 auto", textAlign: "center" }}>
+          <h2 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "25px" }}>
+            Why Housing Data Matters
+          </h2>
+          <p style={{ fontSize: "1.1rem", color: "#444", marginBottom: "30px", lineHeight: "1.8" }}>
+            Housing is about more than shelter — it reflects access, security, and fairness.
+            With affordability ratios above 30% in most provinces and vacancy rates below 2.5%, the housing system is under stress.
+            Our project demystifies the data behind zoning laws, building permits, homelessness trends, and affordability gaps — connecting
+            evidence to lived experience and civic action.
+          </p>
+
+          <h3 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "15px" }}>
             Join Us in Solving the Housing Crisis
           </h3>
-          <p className="text-lg text-gray-600 mb-6">
-            Every piece of data tells a story. Together, we can use this data to identify patterns, spot opportunities, and create change. Stay updated with our platform, explore interactive reports, and contribute to shaping policies that promote fairness, affordability, and sustainable growth in housing across Canada.
+          <p style={{ fontSize: "1.1rem", color: "#555" }}>
+            Whether you’re a researcher, organizer, or student — your role matters.
+            Explore our open tools, learn about your region, and share insights that push for fairness and better public policy.
+            Every chart and dataset can lead to civic impact.
           </p>
+        </div>
+      </div>
+
+      {/* Team Section */}
+      <div style={{ backgroundColor: "white", padding: "60px 20px", textAlign: "center" }}>
+        <h2 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "40px" }}>
+          Meet Our Team
+        </h2>
+        <div style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          gap: "40px",
+          maxWidth: "900px",
+          margin: "0 auto"
+        }}>
+          {/* Maan */}
+          <div style={{
+            width: "220px",
+            border: "1px solid #eee",
+            borderRadius: "12px",
+            padding: "20px",
+            textAlign: "center",
+            backgroundColor: "#f9f9f9"
+          }}>
+            <img src="/assets/men.png" alt="Maan Patel" style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              marginBottom: "10px",
+              objectFit: "cover"
+            }} />
+            <h3 style={{ fontSize: "1.2rem", fontWeight: "bold" }}>Maan Patel</h3>
+            <p style={{ fontSize: "0.95rem", color: "#666" }}>CSJ Data Analyst</p>
+          </div>
+
+          {/* Daniel */}
+          <div style={{
+            width: "220px",
+            border: "1px solid #eee",
+            borderRadius: "12px",
+            padding: "20px",
+            textAlign: "center",
+            backgroundColor: "#f9f9f9"
+          }}>
+            <img src="/assets/men.png" alt="Daniel" style={{
+              width: "100px",
+              height: "100px",
+              borderRadius: "50%",
+              marginBottom: "10px",
+              objectFit: "cover"
+            }} />
+            <h3 style={{ fontSize: "1.2rem", fontWeight: "bold" }}>Daniel</h3>
+            <p style={{ fontSize: "0.95rem", color: "#666" }}>CSJ Data Analyst</p>
+          </div>
         </div>
       </div>
     </div>

@@ -2,171 +2,299 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
-  const [Links, setLinks] = useState(false);
-  const [Gallery, setGallery] = useState(false);
-  const [Contact, setContact] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    if (email.trim()) {
+      alert("Subscribed!");
+      setEmail("");
+    } else {
+      alert("Please enter a valid email address");
+    }
+  };
+
   return (
-    <footer>
-      <section class="contact">
-        <div class="contact-1">
-          <i class="fa fa-phone" id="call" aria-hidden="true"></i>
-          <p class="question">DO YOU HAVE A QUESTION?</p>
-          <p class="number">Email: faye.ying@glocalfoundation.ca</p>
-        </div>
-        <div class="contact-2">
-          <div>
-            <i class="fa fa-envelope-o" id="mail" aria-hidden="true"></i>
-            <input
-              type="search"
-              placeholder="Enter email"
-              className="text-black"
-            />
-          </div>
-          <button
-            onClick={() => {
-              alert("subscribed!!!");
+    <footer style={{ marginTop: "0", paddingTop: "0" }}>
+      {/* Top Bar */}
+      <section
+        style={{
+          backgroundColor: "#3b82f6",
+          padding: "20px 0",
+          color: "white",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            maxWidth: "1200px",
+            margin: "0 auto",
+            padding: "0 20px",
+            flexWrap: "wrap",
+          }}
+        >
+          {/* Contact Info */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              margin: "10px 0",
             }}
           >
-            Subscribe
-          </button>
+            <i
+              className="fa fa-phone"
+              style={{ fontSize: "24px", marginRight: "10px" }}
+            ></i>
+            <div>
+              <p style={{ margin: "0", fontWeight: "bold" }}>
+                DO YOU HAVE A QUESTION?
+              </p>
+              <p style={{ margin: "0" }}>Email: faye.ying@glocalfoundation.ca</p>
+            </div>
+          </div>
+
+          {/* Subscribe Form */}
+          <form
+            onSubmit={handleSubscribe}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              margin: "10px 0",
+              flexWrap: "wrap",
+              gap: "10px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "white",
+                borderRadius: "4px",
+                overflow: "hidden",
+              }}
+            >
+              <i
+                className="fa fa-envelope-o"
+                style={{
+                  padding: "0 10px",
+                  fontSize: "18px",
+                  color: "#3b82f6",
+                }}
+              ></i>
+              <input
+                type="email"
+                placeholder="Enter email"
+                value={email}
+                onChange={handleEmailChange}
+                style={{
+                  border: "none",
+                  padding: "10px",
+                  width: "200px",
+                  outline: "none",
+                  color: "#333",
+                }}
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "#fff",
+                color: "#3b82f6",
+                border: "none",
+                borderRadius: "4px",
+                padding: "10px 20px",
+                cursor: "pointer",
+                fontWeight: "bold",
+              }}
+            >
+              Subscribe
+            </button>
+          </form>
         </div>
       </section>
 
-      <section class="footer">
-        <div class="footer-content">
-          <div class="footer-about">
-            <h1>OUR MISSION</h1>
-            <p>
+      {/* Main Footer */}
+      <section
+        style={{
+          backgroundColor: "#1e3a8a",
+          color: "white",
+          padding: "40px 0 20px",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: "1200px",
+            margin: "0 auto",
+            padding: "0 20px",
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+          }}
+        >
+          {/* Mission */}
+          <div
+            style={{
+              flex: "1 1 300px",
+              margin: "0 20px 30px 0",
+            }}
+          >
+            <h2 style={{ marginBottom: "20px", fontSize: "22px" }}>
+              OUR MISSION
+            </h2>
+            <p style={{ lineHeight: "1.6" }}>
               Access to safe and affordable housing is a fundamental human right
-               and endeavor that can significantly improve the lives of the
-              community's residents. yet many communities across Canada face rising rents, stagnant wages, and a lack of transparent
-              data that reflects their lived realities and urgent needs
+              and endeavor that can significantly improve the lives of the
+              community's residents. Yet many communities across Canada face
+              rising rents, stagnant wages, and a lack of transparent data that
+              reflects their lived realities and urgent needs.
             </p>
-            <br/>
-            <p>
-              Our mission is to address the disconnect between housing data and real-life experiences by building an open, free, 
-              and continuously maintained housing data tool that is both technically sound and socially aware.
+            <p style={{ lineHeight: "1.6" }}>
+              Our mission is to address the disconnect between housing data and
+              real-life experiences by building an open, free, and continuously
+              maintained housing data tool that is both technically sound and
+              socially aware.
             </p>
           </div>
 
-          {/* <div class="footer-links">
-            <h2
-              class="links"
-              onClick={() => {
-                setLinks(!Links);
-              }}
-            >
+          {/* Quick Links */}
+          <div
+            style={{
+              flex: "1 1 200px",
+              margin: "0 20px 30px 0",
+            }}
+          >
+            <h2 style={{ marginBottom: "20px", fontSize: "22px" }}>
               QUICK LINKS
             </h2>
-            <br />
-            <ul class={"footer-links-ul " + (Links && "active-links")}>
-              <li>
-                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-                <Link to="about">About</Link>
-              </li>
-              <li>
-                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-                <Link to="causes">Causes</Link>
-              </li>
-              <li>
-                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-                <Link to="event">Events</Link>
-              </li>
-              <li>
-                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-                <Link to="news">News</Link>
-              </li>
-              <li>
-                <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
-                <Link to="contact">Contact</Link>
-              </li>
+            <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
+              {[
+                ["Home", "/"],
+                ["About", "/about"],
+                ["National Housing Data", "/national-housing-data"],
+                ["Regional Affordability", "/regional-affordability"],
+                ["News", "/news"],
+                ["Contact", "/contact"],
+              ].map(([label, path], i) => (
+                <li key={i} style={{ margin: "8px 0" }}>
+                  <i
+                    className="fa fa-arrow-circle-right"
+                    style={{ marginRight: "10px" }}
+                  ></i>
+                  <Link
+                    to={path}
+                    style={{ color: "white", textDecoration: "none" }}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
-          </div> */}
-
-          <div class="gallery">
-            <h2
-              class="gal-btn"
-              onClick={() => {
-                setGallery(!Gallery);
-              }}
-            >
-              GALLERY
-            </h2>
-            <div class={"gal-container " + (Gallery && "gal-container-active")}>
-              <div>
-                <img src="assets/ga1.png" />
-                <img src="assets/ga2.png" />
-              </div>
-              <div>
-                <img src="assets/gap3.png" />
-                <img src="assets/gal4.png" />
-              </div>
-              <div>
-                <img src="assets/gal5.png" />
-                <img src="assets/gal6.png" />
-              </div>
-            </div>
           </div>
 
-          <div class="contact-footer">
-            <h2
-              class="contact-btn"
-              onClick={() => {
-                setContact(!Contact);
-              }}
-            >
+          {/* Contact Us */}
+          <div
+            style={{
+              flex: "1 1 250px",
+              margin: "0 0 30px 0",
+            }}
+          >
+            <h2 style={{ marginBottom: "20px", fontSize: "22px" }}>
               CONTACT US
             </h2>
-
-            <div
-              class={
-                "contact-container " + (Contact && "contact-container-active")
-              }
-            >
-              <div class="contact-card">
-                <div class="contact-heading">
-                  <div class="location">
-                    <i class="fa fa-map-marker one" aria-hidden="true"></i>
+            {[
+              {
+                icon: "fa-map-marker",
+                title: "Head Office",
+                lines: ["Vancouver, British Columbia"],
+              },
+              {
+                icon: "fa-phone",
+                title: "Phone Number",
+                lines: ["204-78 George St, Ottawa", "Canada"],
+              },
+              {
+                icon: "fa-envelope",
+                title: "Email",
+                lines: ["faye.ying@glocalfoundation.ca"],
+              },
+            ].map((item, idx) => (
+              <div key={idx} style={{ marginBottom: "20px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      backgroundColor: "#3b82f6",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginRight: "15px",
+                    }}
+                  >
+                    <i className={`fa ${item.icon}`} style={{ fontSize: "20px" }}></i>
                   </div>
-                  <h3>Head Office</h3>
-                </div>
-                <div class="contact-ad">
-                  <p>Vancouver, British Columbia</p>
+                  <div>
+                    <h3 style={{ margin: "0 0 5px 0", fontSize: "18px" }}>
+                      {item.title}
+                    </h3>
+                    {item.lines.map((line, i) => (
+                      <p key={i} style={{ margin: 0 }}>
+                        {line}
+                      </p>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div class="contact-card">
-                <div class="contact-heading">
-                  <div class="location">
-                    <i class="fa fa-phone two" aria-hidden="true"></i>
-                  </div>
-                  <h3>Phone Number</h3>
-                </div>
-                <div class="contact-ad">
-                  <p>204-78 George St, Ottawa</p>
-                  <p>Canada</p>
-                </div>
-              </div>
-              <div class="contact-card">
-                <div class="contact-heading">
-                  <div class="location">
-                    <i class="fa fa-envelope three" aria-hidden="true"></i>
-                  </div>
-                  <h3>Email</h3>
-                </div>
-                <div class="contact-ad">
-                  <p>204-78 George St, Ottawa</p>
-                  <p>Canada</p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
-          <p class="copyright">
-            Copyright @ 2025 All Rights Reserved.
-          </p>
+        </div>
+
+        {/* Social Icons */}
+        <div style={{ textAlign: "center", marginTop: "10px" }}>
+          {[
+            ["facebook", "https://facebook.com"],
+            ["twitter", "https://x.com"],
+            ["linkedin", "https://linkedin.com"],
+            ["vine", "https://meta.com"],
+            ["instagram", "https://instagram.com"],
+          ].map(([icon, link], i) => (
+            <a
+              key={i}
+              href={link}
+              target="_blank"
+              rel="noreferrer"
+              className="text-white mx-2"
+              style={{ fontSize: "18px", margin: "0 8px", display: "inline-block" }}
+            >
+              <i className={`fa fa-${icon}`}></i>
+            </a>
+          ))}
+        </div>
+
+        {/* Copyright */}
+        <div
+          style={{
+            textAlign: "center",
+            borderTop: "1px solid rgba(255,255,255,0.1)",
+            paddingTop: "20px",
+            marginTop: "20px",
+          }}
+        >
+          <p style={{ margin: 0 }}>Copyright © 2025 Glocal Foundation. All Rights Reserved.</p>
         </div>
       </section>
     </footer>
@@ -174,6 +302,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
-
-
