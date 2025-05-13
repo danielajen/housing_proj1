@@ -10,7 +10,7 @@ const About = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {/* Banner */}
-      <div
+      {/* <div
         style={{
           backgroundImage: "url('/assets/main-banner.png')",
           backgroundSize: "cover",
@@ -34,7 +34,36 @@ const About = () => {
             Our platform empowers residents, advocates, and researchers to act with informed confidence.
           </p>
         </div>
-      </div>
+      </div> */}
+
+<div className="w-full text-white px-4 py-20 relative" style={{
+  backgroundImage: "url('/assets/main-banner.png')",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+}}>
+  {/* Overlay */}
+  <div style={{
+    position: "absolute",
+    inset: 0,
+    backgroundColor: "#1a365d",
+    opacity: 0.7,
+    zIndex: 0
+  }}></div>
+
+  {/* Content */}
+  <div className="relative z-10 max-w-4xl mx-auto text-center">
+    <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "20px" }}>
+      About Us — Bridging Data and Housing Solutions
+    </h1>
+    <p style={{ fontSize: "1.25rem", lineHeight: "1.7" }}>
+      Our mission is to provide transparency, accessibility, and actionable insights into Canada's housing market.
+      We collect, analyze, and visualize data from trusted sources such as CMHC, Statistics Canada, and provincial open data.
+      Our platform empowers residents, advocates, and researchers to act with informed confidence.
+    </p>
+  </div>
+</div>
+
+
 
       {/* Vision Section */}
       <div style={{ backgroundColor: "#dc2626", color: "white", padding: "60px 20px" }}>

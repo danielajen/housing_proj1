@@ -176,7 +176,7 @@ const RegionalAffordability = () => {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <div
+      {/* <div
         className="flex justify-center items-start w-full h-[320px] bg-green-800 p-5"
         style={{ backgroundImage: "url(/assets/main-banner.png)", backgroundSize: "cover", backgroundPosition: "center" }}
       >
@@ -188,12 +188,48 @@ const RegionalAffordability = () => {
             Comparing housing costs to incomes across Canadian provinces and territories.
           </p>
         </div>
-      </div>
+      </div> */}
+
+      <div style={{
+  width: "100%",
+  backgroundColor: "#1a365d",
+  color: "white",
+  padding: "80px 20px",
+  backgroundImage: "url(/assets/main-banner.png)",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  position: "relative",
+}}>
+  {/* Overlay */}
+  <div style={{
+    position: "absolute",
+    inset: 0,
+    backgroundColor: "#1a365d",
+    opacity: 0.7
+  }}></div>
+
+  {/* Content */}
+  <div style={{
+    position: "relative",
+    zIndex: 1,
+    maxWidth: "1000px",
+    margin: "0 auto",
+    textAlign: "center"
+  }}>
+    <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "20px" }}>
+      Regional Housing Affordability
+    </h1>
+    <p style={{ fontSize: "1.25rem", lineHeight: "1.7" }}>
+      Comparing housing costs to incomes across Canadian provinces and territories.
+    </p>
+  </div>
+</div>
+
 
       {/* Placeholder Content */}
       <div className="w-full bg-white py-12 px-4">
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-6 text-green-800">
+          <h2 className="text-2xl font-bold mb-6">
             Visualizing Affordability Trends
           </h2>
           <p className="text-lg text-gray-700 mb-8">

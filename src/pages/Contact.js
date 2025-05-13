@@ -1,31 +1,41 @@
 import React from "react";
 import "../App.css";
+import { useForm, ValidationError } from "@formspree/react";
 
 const Contact = () => {
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
+  const [state, handleSubmit] = useForm("mkgrpjok");
+
   return (
     <div className="flex flex-col">
-{/* Header */}
-<div
-  className="w-full text-black py-16 px-4 text-center bg-cover bg-center"
-  style={{
-    backgroundImage: "url('/assets/main-banner.png')",
-   
-  }}
->
-  <div className="max-w-4xl mx-auto bg-white/80 p-6 rounded-md shadow-md">
-    <h1 className="text-4xl font-bold mb-4">Contact Our Housing Data Team</h1>
-    <p className="text-lg">
-      Have questions about Canada's housing data? Want to collaborate or report an issue?
-      Reach out to our team of researchers and community advocates.
-    </p>
-  </div>
-</div>
+      <div className="w-full text-white px-4 py-20 relative" style={{
+        backgroundImage: "url('/assets/main-banner.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}>
+        {/* Overlay */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          backgroundColor: "#1a365d",
+          opacity: 0.7,
+          zIndex: 0
+        }}></div>
 
-
+        {/* Content */}
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "20px" }}>
+            Contact Our Housing Data Team
+          </h1>
+          <p style={{ fontSize: "1.25rem", lineHeight: "1.7" }}>
+            Have questions about Canada's housing data? Want to collaborate or report an issue?
+            Reach out to our team of researchers and community advocates.
+          </p>
+        </div>
+      </div>
 
       {/* Contact Content */}
       <div className="w-full bg-white py-16 px-4">
@@ -33,28 +43,61 @@ const Contact = () => {
           {/* Form */}
           <div className="bg-gray-50 p-8 rounded-lg shadow">
             <h2 className="text-2xl font-bold text-[var(--red)] mb-6 text-center">Send Us a Message</h2>
-            <form className="space-y-5">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
-                <input type="text" id="name" placeholder="John Doe"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--red)]" />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                <input type="email" id="email" placeholder="you@example.com"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--red)]" />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Your Message</label>
-                <textarea id="message" rows="5" placeholder="Type your message..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--red)]" />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-[var(--red)] text-white font-bold py-2 rounded-lg hover:bg-[var(--dark-red)] transition">
-                Send Message
-              </button>
-            </form>
+            {state.succeeded ? (
+              <p className="text-green-600 font-semibold text-center">Thanks for your message!</p>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    placeholder="John Doe"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--red)]"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    placeholder="you@example.com"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--red)]"
+                  />
+                  <ValidationError prefix="Email" field="email" errors={state.errors} />
+                </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Your Message</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows="5"
+                    placeholder="Type your message..."
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--red)]"
+                  />
+                  <ValidationError prefix="Message" field="message" errors={state.errors} />
+                </div>
+                {/* <button
+                  type="submit"
+                  disabled={state.submitting}
+                  className="w-full bg-[var(--red)] text-white font-bold py-2 rounded-lg hover:bg-[var(--dark-red)] transition"
+                >
+                  Send Message
+                </button> */}
+
+<button
+  type="submit"
+  disabled={state.submitting}
+  className="w-full bg-white text-black font-medium py-2 rounded-md border border-gray-300 hover:bg-grey-100 transition"
+>
+  {state.submitting ? "Sending..." : "Send Message"}
+</button>
+
+
+              </form>
+            )}
           </div>
 
           {/* Info */}
@@ -98,3 +141,4 @@ const Contact = () => {
 };
 
 export default Contact;
+

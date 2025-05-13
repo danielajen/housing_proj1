@@ -11,7 +11,8 @@ const Footer = () => {
   const handleSubscribe = (e) => {
     e.preventDefault();
     if (email.trim()) {
-      alert("Subscribed!");
+      // alert("Subscribed!");
+      window.location.href = `mailto:faye.ying@glocalfoundation.ca?subject=Subscribe&body=Please add ${email} to your newsletter list.`;
       setEmail("");
     } else {
       alert("Please enter a valid email address");
@@ -251,11 +252,24 @@ const Footer = () => {
                     <h3 style={{ margin: "0 0 5px 0", fontSize: "18px" }}>
                       {item.title}
                     </h3>
-                    {item.lines.map((line, i) => (
+                    {/* {item.lines.map((line, i) => (
                       <p key={i} style={{ margin: 0 }}>
                         {line}
                       </p>
-                    ))}
+                    ))} */}
+
+                    {item.lines.map((line, i) => (
+                    <p key={i} style={{ margin: 0 }}>
+                    {item.title === "Email" ? (
+                    <a href={`mailto:${line}`} style={{ color: "white", textDecoration: "underline" }}>
+                      {line}
+                     </a>
+                   ) : (
+                    line
+                      )}
+                      </p>
+                      ))}
+
                   </div>
                 </div>
               </div>
@@ -266,11 +280,11 @@ const Footer = () => {
         {/* Social Icons */}
         <div style={{ textAlign: "center", marginTop: "10px" }}>
           {[
-            ["facebook", "https://facebook.com"],
+            ["facebook", "https://www.facebook.com/102729201906595"],
             ["twitter", "https://x.com"],
-            ["linkedin", "https://linkedin.com"],
-            ["vine", "https://meta.com"],
-            ["instagram", "https://instagram.com"],
+            ["linkedin", "https://www.linkedin.com/company/glocal-foundation-of-canada"],
+            // ["vine", "https://meta.com"],
+            ["instagram", "https://www.instagram.com/youcountcanada/"],
           ].map(([icon, link], i) => (
             <a
               key={i}
@@ -294,7 +308,7 @@ const Footer = () => {
             marginTop: "20px",
           }}
         >
-          <p style={{ margin: 0 }}>Copyright © 2025 Glocal Foundation. All Rights Reserved.</p>
+          <p style={{ margin: 0 }}>Copyright © 2025 Glocal Foundation of Canada. All Rights Reserved.</p>
         </div>
       </section>
     </footer>

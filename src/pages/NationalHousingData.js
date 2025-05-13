@@ -181,7 +181,7 @@ const NationalHousingData = () => {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <div
+      {/* <div
         className="flex justify-center items-start w-full h-[320px] bg-blue-900 text-white p-5"
         style={{ backgroundImage: "url(/assets/main-banner.png)", backgroundSize: "cover", backgroundPosition: "center" }}
       >
@@ -193,12 +193,48 @@ const NationalHousingData = () => {
             A national look at how many housing units are being built across Canada.
           </p>
         </div>
-      </div>
+      </div> */}
+
+      <div style={{
+  width: "100%",
+  backgroundColor: "#1a365d",
+  color: "white",
+  padding: "80px 20px",
+  backgroundImage: "url(/assets/main-banner.png)",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  position: "relative",
+}}>
+  {/* Overlay */}
+  <div style={{
+    position: "absolute",
+    inset: 0,
+    backgroundColor: "#1a365d",
+    opacity: 0.7
+  }}></div>
+
+  {/* Content */}
+  <div style={{
+    position: "relative",
+    zIndex: 1,
+    maxWidth: "1000px",
+    margin: "0 auto",
+    textAlign: "center"
+  }}>
+    <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "20px" }}>
+      National Housing Construction
+    </h1>
+    <p style={{ fontSize: "1.25rem", lineHeight: "1.7" }}>
+      A national look at how many housing units are being built across Canada.
+    </p>
+  </div>
+</div>
+
 
       {/* Info Section */}
       <div className="w-full bg-white py-12 px-4">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl font-bold text-blue-900 mb-6">
+          <h2 className="text-2xl font-bold mb-6">
             Tracking Canada's Housing Starts
           </h2>
           <p className="text-lg text-gray-700 mb-8">

@@ -54,7 +54,7 @@ const News = () => {
   return (
     <div className="flex flex-col">
       {/* Banner Section */}
-      <div className="flex justify-center items-start w-full h-[320px] bg-[#1a365d] p-5">
+      {/* <div className="flex justify-center items-start w-full h-[320px] bg-[#1a365d] p-5">
         <div className="flex flex-col w-[90%] md:w-[50%] h-full justify-around text-center text-gray-100">
           <h1 className="text-4xl md:text-6xl font-bold">
             Housing News & Updates
@@ -63,7 +63,34 @@ const News = () => {
             Stay informed about Canada's housing market developments, policy changes, and community initiatives
           </p>
         </div>
-      </div>
+      </div> */}
+
+    <div className="w-full text-white px-4 py-20 relative" style={{
+  backgroundImage: "url('/assets/main-banner.png')",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+}}>
+  {/* Overlay */}
+  <div style={{
+    position: "absolute",
+    inset: 0,
+    backgroundColor: "#1a365d",
+    opacity: 0.7,
+    zIndex: 0
+  }}></div>
+
+  {/* Content */}
+  <div className="relative z-10 max-w-4xl mx-auto text-center">
+    <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "20px" }}>
+      Housing News & Updates
+    </h1>
+    <p style={{ fontSize: "1.25rem" }}>
+      Stay informed about Canada's housing market developments, policy changes, and community initiatives
+    </p>
+  </div>
+</div>
+
+
 
       {/* News Grid */}
       <div className="w-full bg-gray-100 py-12 px-4">

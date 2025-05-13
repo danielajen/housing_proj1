@@ -23,7 +23,7 @@ const IndigenousHousing = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       {/* Hero Section */}
-      <div
+      {/* <div
         style={{
           width: "100%",
           backgroundColor: "#1a365d",
@@ -44,7 +44,42 @@ const IndigenousHousing = () => {
             Understanding the challenges, data gaps, and solutions surrounding Indigenous housing.
           </p>
         </div>
-      </div>
+      </div> */}
+      <div style={{
+  width: "100%",
+  backgroundColor: "#1a365d",
+  color: "white",
+  padding: "80px 20px",
+  backgroundImage: "url(/assets/main-banner.png)",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  position: "relative",
+}}>
+  {/* Overlay */}
+  <div style={{
+    position: "absolute",
+    inset: 0,
+    backgroundColor: "#1a365d",
+    opacity: 0.7
+  }}></div>
+
+  {/* Content */}
+  <div style={{
+    position: "relative",
+    zIndex: 1,
+    maxWidth: "1000px",
+    margin: "0 auto",
+    textAlign: "center"
+  }}>
+    <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "20px" }}>
+      Indigenous Housing in Canada
+    </h1>
+    <p style={{ fontSize: "1.25rem", lineHeight: "1.7" }}>
+      Understanding the challenges, data gaps, and solutions surrounding Indigenous housing.
+    </p>
+  </div>
+</div>
+
 
       {/* Context Section */}
       <div style={{ backgroundColor: "#ffffff", padding: "60px 20px" }}>
