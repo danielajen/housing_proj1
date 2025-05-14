@@ -168,7 +168,7 @@ const Footer = () => {
           <div
             style={{
               flex: "1 1 200px",
-              margin: "0 20px 30px 0",
+              margin: "0 20px 30px 80px",
             }}
           >
             <h2 style={{ marginBottom: "20px", fontSize: "22px" }}>
@@ -178,9 +178,12 @@ const Footer = () => {
               {[
                 ["Home", "/"],
                 ["About", "/about"],
-                ["National Housing Data", "/national-housing-data"],
+                ["National Housing ", "/national-housing-data"],
                 ["Regional Affordability", "/regional-affordability"],
+                ["Tenant Resources ", "/tenant-resources"],
+                ["Indigenous Housing ", "/indigenous-housing"],
                 ["News", "/news"],
+                ["Housing Policy", "/housing-policy"],
                 ["Contact", "/contact"],
               ].map(([label, path], i) => (
                 <li key={i} style={{ margin: "8px 0" }}>
@@ -213,12 +216,12 @@ const Footer = () => {
               {
                 icon: "fa-map-marker",
                 title: "Head Office",
-                lines: ["Vancouver, British Columbia"],
+                lines: ["204-78 George St, Ottawa Ontario "],
               },
               {
                 icon: "fa-phone",
                 title: "Phone Number",
-                lines: ["204-78 George St, Ottawa", "Canada"],
+                lines: ["123-456-7890"],
               },
               {
                 icon: "fa-envelope",
@@ -281,7 +284,7 @@ const Footer = () => {
         <div style={{ textAlign: "center", marginTop: "10px" }}>
           {[
             ["facebook", "https://www.facebook.com/102729201906595"],
-            ["twitter", "https://x.com"],
+            ["twitter", "https://x.com/GLOCAL_Canada"],
             ["linkedin", "https://www.linkedin.com/company/glocal-foundation-of-canada"],
             // ["vine", "https://meta.com"],
             ["instagram", "https://www.instagram.com/youcountcanada/"],

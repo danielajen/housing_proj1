@@ -1,6 +1,7 @@
 
-// import "./App.css";
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+// import { useEffect } from "react";
 // import Header from "./components/Header";
 // import Footer from "./components/Footer";
 // import Home from "./pages/Home";
@@ -12,16 +13,25 @@
 // import HousingPolicy from "./pages/HousingPolicy";
 // import TenantResources from "./pages/TenantResources";
 // import IndigenousHousing from "./pages/IndigenousHousing";
-// import { useEffect } from "react";
 
 // function App() {
-//   useEffect(() => {
-//     window.scrollTo(0, 0);
-//   }, []);
-
 //   return (
 //     <BrowserRouter>
-//       <Header />
+//       <AppContent />
+//     </BrowserRouter>
+//   );
+// }
+
+// function AppContent() {
+//   const location = useLocation();
+
+//   useEffect(() => {
+//     window.scrollTo(0, 0);
+//   }, [location.pathname]);
+
+//   return (
+//     <>
+//       <Header path={location.pathname} />
 //       <main>
 //         <Routes>
 //           <Route path="/" element={<Home />} />
@@ -36,7 +46,7 @@
 //         </Routes>
 //       </main>
 //       <Footer />
-//     </BrowserRouter>
+//     </>
 //   );
 // }
 
@@ -56,6 +66,7 @@ import RegionalAffordability from "./pages/RegionalAffordability";
 import HousingPolicy from "./pages/HousingPolicy";
 import TenantResources from "./pages/TenantResources";
 import IndigenousHousing from "./pages/IndigenousHousing";
+import Donation from "./pages/Donation";
 
 function App() {
   return (
@@ -86,6 +97,7 @@ function AppContent() {
           <Route path="/regional-affordability" element={<RegionalAffordability />} />
           <Route path="/tenant-resources" element={<TenantResources />} />
           <Route path="/indigenous-housing" element={<IndigenousHousing />} />
+          <Route path="/donation" element={<Donation />} />
         </Routes>
       </main>
       <Footer />

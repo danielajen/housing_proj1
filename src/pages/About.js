@@ -146,9 +146,10 @@ const About = () => {
             textAlign: "center",
             backgroundColor: "#f9f9f9"
           }}>
-            <img src="/assets/men.png" alt="Maan Patel" style={{
+            <img src="/assets/maan.jpg" alt="Maan Patel" style={{
               width: "100px",
               height: "100px",
+              marginLeft: "40px",
               borderRadius: "50%",
               marginBottom: "10px",
               objectFit: "cover"
@@ -166,9 +167,10 @@ const About = () => {
             textAlign: "center",
             backgroundColor: "#f9f9f9"
           }}>
-            <img src="/assets/men.png" alt="Daniel" style={{
+            <img src="/assets/daniel.jpg" alt="Daniel" style={{
               width: "100px",
               height: "100px",
+             marginLeft: "40px",
               borderRadius: "50%",
               marginBottom: "10px",
               objectFit: "cover"
