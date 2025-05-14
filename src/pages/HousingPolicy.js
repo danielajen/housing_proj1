@@ -1,3 +1,4 @@
+import 'chartjs-adapter-date-fns';
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Scatter } from "react-chartjs-2";
@@ -10,7 +11,9 @@ import {
   PointElement,
 } from "chart.js";
 
-ChartJS.register(Title, Tooltip, Legend, LinearScale, PointElement);
+import { TimeScale, CategoryScale } from "chart.js";
+
+ChartJS.register(Title, Tooltip, Legend, LinearScale, PointElement, TimeScale, CategoryScale);
 
 const HousingPolicy = () => {
   const [policyData, setPolicyData] = useState(null);
