@@ -152,7 +152,7 @@ const Home = () => {
       </div>
 
       {/* ✅ Combined CTA Section */}
-      <div style={{ backgroundColor: "#dc2626", color: "white", padding: "60px 20px" }}>
+      {/* <div style={{ backgroundColor: "#dc2626", color: "white", padding: "60px 20px" }}>
         <div style={{ maxWidth: "800px", margin: "0 auto", textAlign: "center" }}>
           <h2 style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "20px" }}>
             Ready to explore Canada's housing data?
@@ -230,7 +230,164 @@ const Home = () => {
             </button>
           </div>
         </div>
+      </div> */}
+
+      {/* ✅ Refined CTA Section with White Background */}
+<div
+  style={{
+    backgroundColor: "#ffffff",
+    color: "#1f2937",
+    padding: "60px 20px",
+  }}
+>
+  <div
+    style={{
+      maxWidth: "1200px",
+      margin: "0 auto",
+      display: "flex",
+      flexWrap: "wrap",
+      justifyContent: "center",
+      gap: "30px",
+    }}
+  >
+    {/* Card 1 */}
+    <div
+      style={{
+        backgroundColor: "white",
+        borderRadius: "16px",
+        padding: "40px 30px",
+        flex: "1 1 450px",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+        textAlign: "center",
+      }}
+    >
+      <h2
+        style={{
+          fontSize: "1.8rem",
+          fontWeight: "bold",
+          marginBottom: "16px",
+        }}
+      >
+        Ready to explore Canada's housing data?
+      </h2>
+      <p
+        style={{
+          fontSize: "1.1rem",
+          marginBottom: "30px",
+        }}
+      >
+        Start with a national overview or dive into localized trends and
+        challenges.
+      </p>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "15px",
+          justifyContent: "center",
+        }}
+      >
+        <button
+          onClick={() => navigate("/national-housing-data")}
+          style={{
+            backgroundColor: "#dc2626",
+            color: "white",
+            padding: "12px 24px",
+            borderRadius: "8px",
+            fontWeight: "bold",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          View National Data
+        </button>
+        <button
+          onClick={() => navigate("/regional-affordability")}
+          style={{
+            backgroundColor: "white",
+            color: "#dc2626",
+            padding: "12px 24px",
+            border: "2px solid #dc2626",
+            borderRadius: "8px",
+            fontWeight: "bold",
+            cursor: "pointer",
+          }}
+        >
+          Find Local Insights
+        </button>
       </div>
+    </div>
+
+    {/* Card 2 */}
+    <div
+      style={{
+        backgroundColor: "white",
+        borderRadius: "16px",
+        padding: "40px 30px",
+        flex: "1 1 450px",
+        boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+        textAlign: "center",
+      }}
+    >
+      <h2
+        style={{
+          fontSize: "1.8rem",
+          fontWeight: "bold",
+          marginBottom: "16px",
+        }}
+      >
+        Take the Next Step
+      </h2>
+      <p
+        style={{
+          fontSize: "1.1rem",
+          marginBottom: "30px",
+        }}
+      >
+        Learn how government policy impacts housing — and what you can do to
+        push for change.
+      </p>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "15px",
+          justifyContent: "center",
+        }}
+      >
+        <button
+          onClick={() => navigate("/news")}
+          style={{
+            backgroundColor: "#dc2626",
+            color: "white",
+            padding: "12px 24px",
+            borderRadius: "8px",
+            fontWeight: "bold",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          Explore More Data
+        </button>
+        <button
+          onClick={() => navigate("/housing-policy")}
+          style={{
+            backgroundColor: "white",
+            color: "#dc2626",
+            padding: "12px 24px",
+            border: "2px solid #dc2626",
+            borderRadius: "8px",
+            fontWeight: "bold",
+            cursor: "pointer",
+          }}
+        >
+          Learn About Housing Policy
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
     </div>
   );
 };
