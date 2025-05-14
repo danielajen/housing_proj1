@@ -51,10 +51,11 @@ const TenantResources = () => {
           method: 'POST',
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify([
-            { vectorId: 36100608, latestN: 1 },
-            { vectorId: 36100609, latestN: 1 },
-            { vectorId: 36100610, latestN: 1 },
-            { vectorId: 36100611, latestN: 1 }
+            { vectorId: 3410028601, latestN: 10 }, // Canada Total (2024 Table ID)
+            { vectorId: 3410028602, latestN: 10 }, // British Columbia
+            { vectorId: 3410028603, latestN: 10 }, // Ontario
+            { vectorId: 3410028604, latestN: 10 }, // Quebec
+            { vectorId: 3410028605, latestN: 10 }  // Alberta
           ])
         });
 
@@ -84,7 +85,7 @@ const TenantResources = () => {
         const response = await fetch("http://localhost:3001/api/statcan", {
           method: 'POST',
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify([{ vectorId: 10100364, latestN: 120 }])
+          body: JSON.stringify([{ vectorId: 10100364, latestN: 10 }])
         });
 
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
@@ -114,62 +115,39 @@ const TenantResources = () => {
           method: 'POST',
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify([
-            { vectorId: 11100455, latestN: 10 },
-            { vectorId: 11100462, latestN: 10 },
-            { vectorId: 11100469, latestN: 10 },
-            { vectorId: 11100476, latestN: 10 }
+            { vectorId: 3410045501, latestN: 5 }, // Vancouver Annual (2017-2021)
+            { vectorId: 3410045502, latestN: 5 }, // Toronto Annual
+            { vectorId: 3410045503, latestN: 5 }, // Montreal Annual
+            { vectorId: 3410045504, latestN: 5 }  // Calgary Annual
           ])
         });
-
+    
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
         const data = await response.json();
         
+        // Verify and structure data
+        const years = [2017, 2018, 2019, 2020, 2021];
+        const processData = (cityData, index) => {
+          const rawValues = cityData.object.vectorDataPoint
+            .slice(0, 5) // Get first 5 entries (2017-2021)
+            .map(d => d.value);
+          
+          return {
+            label: ["Vancouver", "Toronto", "Montreal", "Calgary"][index],
+            data: rawValues,
+            borderColor: ["#e15759", "#4e79a7", "#f28e2b", "#59a14f"][index]
+          };
+        };
+    
         setRentGrowthData({
-          labels: Array.from({length: 10}, (_, i) => 2023 - i).reverse(),
-          datasets: [
-            createRentDataset('Vancouver', data[0], '#e15759'),
-            createRentDataset('Toronto', data[1], '#4e79a7'),
-            createRentDataset('Montreal', data[2], '#f28e2b'),
-            createRentDataset('Calgary', data[3], '#59a14f')
-          ]
+          labels: years,
+          datasets: data.map(processData)
         });
-        setLoading(prev => [prev[0], prev[1], false, prev[3], prev[4]]);
+    
       } catch (err) {
+        console.error("Rent growth fetch failed:", err);
         setError(prev => [prev[0], prev[1], err.message, prev[3], prev[4]]);
-      }
-    };
-
-    // 4. Current Rental Prices (Bar Chart)
-    const fetchCurrentRents = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/api/statcan", {
-          method: 'POST',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify([
-            { vectorId: 11100455, latestN: 1 },
-            { vectorId: 11100462, latestN: 1 },
-            { vectorId: 11100469, latestN: 1 },
-            { vectorId: 11100476, latestN: 1 }
-          ])
-        });
-
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        
-        setCurrentRentData({
-          labels: ["Vancouver", "Toronto", "Montreal", "Calgary"],
-          datasets: [{
-            label: 'Average Rent (2023)',
-            data: data.map(d => d?.object?.vectorDataPoint?.[0]?.value || 0),
-            backgroundColor: 'rgba(53, 162, 235, 0.7)',
-            borderColor: 'rgba(53, 162, 235, 1)',
-            borderWidth: 1,
-            borderRadius: 5
-          }]
-        });
-        setLoading(prev => [prev[0], prev[1], prev[2], false, prev[4]]);
-      } catch (err) {
-        setError(prev => [prev[0], prev[1], prev[2], err.message, prev[4]]);
       }
     };
 
@@ -218,7 +196,6 @@ const TenantResources = () => {
     fetchConstructionInvestment();
     fetchMortgageTrends();
     fetchRentGrowth();
-    fetchCurrentRents();
     fetchEvictions();
   }, []);
 
@@ -409,44 +386,6 @@ const TenantResources = () => {
           </div>
           {loading[2] && <div>Loading rent history...</div>}
           {error[2] && <div style={{ color: 'red' }}>Error loading rent trends</div>}
-        </div>
-
-        {/* Current Rents */}
-        <div style={{ 
-          background: '#fff', 
-          padding: '20px', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          minHeight: '600px'
-        }}>
-          <h3 style={{ color: '#2c3e50', marginBottom: '15px' }}>Metro Rental Price Benchmarks</h3>
-          <div style={{ height: '400px', position: 'relative' }}>
-            {currentRentData && <Bar 
-              data={currentRentData} 
-              options={{ 
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: { position: 'top' }
-                }
-              }} 
-            />}
-          </div>
-          <div style={{ marginTop: '15px' }}>
-            <h4>Affordability Crisis</h4>
-            <p>2023 Average 2-Bedroom Rents:</p>
-            <ul>
-              <li><strong>Vancouver $2,450:</strong> Requires $85k salary</li>
-              <li><strong>Toronto $2,300:</strong> 62% listings &gt;$2k</li>
-              <li><strong>Montreal $1,650:</strong> Service worker haven</li>
-              <li><strong>Calgary $1,550:</strong> 18% YOY increase</li>
-            </ul>
-            <div style={{ fontSize: '0.9em', color: '#666' }}>
-              Source: StatsCan Rental Market Report
-            </div>
-          </div>
-          {loading[3] && <div>Loading current rents...</div>}
-          {error[3] && <div style={{ color: 'red' }}>Error loading rent data</div>}
         </div>
 
         {/* Evictions */}
