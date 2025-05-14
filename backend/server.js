@@ -46,7 +46,7 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const stripe = Stripe();
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 app.post('/api/statcan', async (req, res) => {
   try {
@@ -65,7 +65,7 @@ app.post('/api/statcan', async (req, res) => {
   }
 });
 
-// ✅ Stripe Donation Checkout Session
+
 app.post('/api/create-checkout-session', async (req, res) => {
   try {
     const session = await stripe.checkout.sessions.create({
@@ -92,6 +92,6 @@ app.post('/api/create-checkout-session', async (req, res) => {
   }
 });
 
-// ✅ Listen
+
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => console.log(`Proxy running on port ${PORT}`));
