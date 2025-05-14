@@ -46,8 +46,8 @@ app.use(cors({
 }));
 app.use(express.json());
 
+const stripe = Stripe();
 
-// ✅ Existing StatCan Proxy
 app.post('/api/statcan', async (req, res) => {
   try {
     const statcanResponse = await axios.post(
