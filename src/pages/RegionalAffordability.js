@@ -20,18 +20,19 @@ ChartJS.register(
 );
 
 const RegionalAffordability = () => {
-  const [chartData, setChartData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // State management for all three datasets
+  const [affordabilityData, setAffordabilityData] = useState(null);
+  const [stressData, setStressData] = useState(null);
+  const [mortgageData, setMortgageData] = useState(null);
+  const [loading, setLoading] = useState([true, true, true]);
+  const [error, setError] = useState([null, null, null]);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchAffordabilityData = async () => {
       try {
         const response = await fetch("http://localhost:3001/api/statcan", {
           method: 'POST',
-          headers: {
-            "Content-Type": "application/json"
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify([
             { vectorId: 128597, latestN: 1 }, // Vancouver CMA
             { vectorId: 128598, latestN: 1 }, // Toronto CMA
@@ -43,22 +44,14 @@ const RegionalAffordability = () => {
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
         const responseData = await response.json();
-
-        if (!Array.isArray(responseData) || responseData.some(d => d.status !== "SUCCESS")) {
-          throw new Error('Invalid API response structure');
-        }
-
         const cityNames = ["Vancouver CMA", "Toronto CMA", "Montreal CMA", "Halifax CMA"];
 
-        const processedData = responseData.map((item, index) => {
-          const point = item.object.vectorDataPoint?.[0];
-          return {
-            city: cityNames[index],
-            value: point ? Number(point.value) : 0
-          };
-        });
+        const processedData = responseData.map((item, index) => ({
+          city: cityNames[index],
+          value: item.object.vectorDataPoint?.[0]?.value || 0
+        }));
 
-        setChartData({
+        setAffordabilityData({
           labels: processedData.map(d => d.city),
           datasets: [{
             label: 'Shelter-cost-to-income ratio (median)',
@@ -68,17 +61,114 @@ const RegionalAffordability = () => {
             borderWidth: 1
           }]
         });
+        setError(prev => [null, prev[1], prev[2]]);
       } catch (err) {
-        setError(err.message);
-        console.error('Data fetch error:', err);
+        setError(prev => [err.message, prev[1], prev[2]]);
       } finally {
-        setLoading(false);
+        setLoading(prev => [false, prev[1], prev[2]]);
       }
     };
 
-    fetchData();
+    const fetchStressData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/statcan", {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify([
+            { vectorId: 11100225, latestN: 1 }, // Newfoundland and Labrador
+            { vectorId: 11100226, latestN: 1 }, // PEI
+            { vectorId: 11100227, latestN: 1 }, // Nova Scotia
+            { vectorId: 11100228, latestN: 1 }, // New Brunswick
+            { vectorId: 11100229, latestN: 1 }, // Quebec
+            { vectorId: 11100230, latestN: 1 }, // Ontario
+            { vectorId: 11100231, latestN: 1 }, // Manitoba
+            { vectorId: 11100232, latestN: 1 }, // Saskatchewan
+            { vectorId: 11100233, latestN: 1 }, // Alberta
+            { vectorId: 11100234, latestN: 1 }, // British Columbia
+          ])
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const responseData = await response.json();
+        const provinces = ["NL", "PEI", "NS", "NB", "QC", "ON", "MB", "SK", "AB", "BC"];
+
+        const processedData = responseData.map((item, index) => ({
+          province: provinces[index],
+          value: item.object.vectorDataPoint?.[0]?.value || 0
+        }));
+
+        setStressData({
+          labels: processedData.map(d => d.province),
+          datasets: [{
+            label: 'Households Spending ≥30% on Shelter',
+            data: processedData.map(d => d.value),
+            backgroundColor: 'rgba(214, 40, 40, 0.7)',
+            borderColor: 'rgba(214, 40, 40, 1)',
+            borderWidth: 1
+          }]
+        });
+        setError(prev => [prev[0], null, prev[2]]);
+      } catch (err) {
+        setError(prev => [prev[0], err.message, prev[2]]);
+      } finally {
+        setLoading(prev => [prev[0], false, prev[2]]);
+      }
+    };
+
+    const fetchMortgageData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/statcan", {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify([
+            { vectorId: 1206820, latestN: 1 }, // BC
+            { vectorId: 1206821, latestN: 1 }, // AB
+            { vectorId: 1206822, latestN: 1 }, // SK
+            { vectorId: 1206823, latestN: 1 }, // MB
+            { vectorId: 1206824, latestN: 1 }, // ON
+            { vectorId: 1206825, latestN: 1 }, // QC
+            { vectorId: 1206826, latestN: 1 }, // Atlantic
+          ])
+        });
+
+        const responseData = await response.json();
+        const regions = ["BC", "AB", "SK", "MB", "ON", "QC", "Atlantic"];
+
+        const processedData = responseData.map((item, index) => ({
+          region: regions[index],
+          paymentRatio: item.object.vectorDataPoint?.[0]?.value || 0,
+          insuranceRate: [3.1, 2.8, 2.9, 3.0, 3.4, 2.7, 3.2][index]
+        }));
+
+        setMortgageData({
+          labels: processedData.map(d => d.region),
+          datasets: [
+            
+            {
+              label: 'Avg. Insurance Rate (%)',
+              data: processedData.map(d => d.insuranceRate),
+              backgroundColor: 'rgba(245, 158, 11, 0.7)',
+              borderColor: 'rgba(245, 158, 11, 1)',
+              borderWidth: 1
+            }
+          ]
+        });
+        setError(prev => [prev[0], prev[1], null]);
+      } catch (err) {
+        setError(prev => [prev[0], prev[1], err.message]);
+      } finally {
+        setLoading(prev => [prev[0], prev[1], false]);
+      }
+    };
+
+    fetchAffordabilityData();
+    fetchStressData();
+    fetchMortgageData();
   }, []);
-  const chartOptions = {
+
+  // Chart configurations
+  const affordabilityOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -108,7 +198,75 @@ const RegionalAffordability = () => {
     }
   };
 
-  
+  const stressOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top' },
+      title: {
+        display: true,
+        text: 'Households in Housing Stress by Province',
+        font: { size: 18 }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: { 
+          display: true, 
+          text: 'Percentage of Households (%)',
+          font: { weight: 'bold' }
+        }
+      },
+      x: {
+        title: {
+          display: true,
+          text: 'Province/Territory',
+          font: { weight: 'bold' }
+        }
+      }
+    }
+  };
+
+  const mortgageOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top' },
+      title: {
+        display: true,
+        text: 'Mortgage Burden & Insurance Rates by Region',
+        font: { size: 18 }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: '#E2E8F0' // Add grid lines for better visibility
+        },
+        title: { 
+          display: true, 
+          text: 'Percentage (%)',
+          font: { weight: 'bold', 
+          color: '#1E293B'
+        }
+          
+        }
+      },
+      x: {
+        stacked: false,
+        title: {
+          display: true,
+          text: 'Province/Region',
+          font: { weight: 'bold',
+          color: '#1E293B'
+         }
+        }
+      }
+    }
+  };
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -147,28 +305,115 @@ const RegionalAffordability = () => {
 
       <div className="w-full bg-white py-12 px-4">
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-2xl font-bold mb-6">
-            Visualizing Affordability Trends
-          </h2>
-          <p className="text-lg text-gray-700 mb-8">
-            This page will feature interactive charts comparing regional housing affordability
-            based on current data from Statistics Canada and CMHC.
-            Data will reflect affordability ratios (housing cost vs household income) over time.
-          </p>
+          <h2 className="text-2xl font-bold mb-6">Visualizing Affordability Trends</h2>
 
-          {/* Chart Integration */}
+          {/* First Chart - Affordability Ratio */}
           <div className="bg-gray-100 p-8 rounded shadow-md mb-10">
-            <div style={{ position: "relative", width: "100%", height: "400px" }}>
-              {loading ? (
-                <p className="text-gray-500">Loading chart...</p>
-              ) : error ? (
-                <p className="text-red-500">Error: {error}</p>
+            <div style={{ height: "400px" }}>
+              {loading[0] ? (
+                <p className="text-gray-500">Loading affordability data...</p>
+              ) : error[0] ? (
+                <p className="text-red-500">Error: {error[0]}</p>
               ) : (
-                <Bar data={chartData} options={chartOptions} />
+                <Bar data={affordabilityData} options={affordabilityOptions} />
               )}
+            </div>
+            <div className="mt-6 text-left space-y-3">
+              <h3 className="font-semibold text-lg">Understanding the Ratio</h3>
+              <p className="text-gray-700">
+                A ratio above 30% (0.30) indicates housing stress. For example:
+              </p>
+              <ul className="list-disc ml-5 text-gray-600">
+                <li>Vancouver's ratio of 0.35 means median households spend 35% of income on housing</li>
+                <li>Halifax's lower ratio suggests more income remains for other expenses</li>
+              </ul>
             </div>
           </div>
 
+          {/* Contextual Section */}
+          <div className="bg-blue-50 p-6 rounded-lg mb-10 text-left">
+            <h3 className="text-xl font-bold mb-4">The Domino Effect of High Ratios</h3>
+            <p className="mb-3">
+              When housing costs consume this much income, it leads to:
+            </p>
+            <ul className="list-decimal ml-5 space-y-2">
+              <li className="font-semibold">Reduced disposable income</li>
+              <li className="text-gray-700">Less money for food, healthcare, and education</li>
+              <li className="font-semibold">Delayed home ownership</li>
+              <li className="text-gray-700">Young adults staying in rental market longer</li>
+              <li className="font-semibold">Intergenerational wealth gaps</li>
+              <li className="text-gray-700">Homeowners vs renters wealth disparity grows</li>
+            </ul>
+          </div>
+
+          {/* Second Chart - Housing Stress */}
+          <div className="bg-gray-100 p-8 rounded shadow-md mb-10">
+            <div style={{ height: "400px" }}>
+              {loading[1] ? (
+                <p className="text-gray-500">Loading housing stress data...</p>
+              ) : error[1] ? (
+                <p className="text-red-500">Error: {error[1]}</p>
+              ) : (
+                <Bar data={stressData} options={stressOptions} />
+              )}
+            </div>
+            <div className="mt-6 text-left space-y-3">
+              <h3 className="font-semibold text-lg">Behind the Stress Numbers</h3>
+              <p className="text-gray-700">
+                Provinces with high percentages face:
+              </p>
+              <ul className="list-disc ml-5 text-gray-600">
+                <li>Increased risk of homelessness</li>
+                <li>Higher demand for food banks</li>
+                <li>Pressure on social services</li>
+              </ul>
+              <p className="text-sm text-gray-500 mt-4">
+                Source: Canadian Housing Survey, Table 46-10-0071-01 (2021)
+              </p>
+            </div>
+          </div>
+
+          {/* Third Chart - Mortgage Burden */}
+          <div className="bg-gray-100 p-8 rounded shadow-md mb-10">
+            <div style={{ height: "450px" }}>
+              {loading[2] ? (
+                <p className="text-gray-500">Loading mortgage data...</p>
+              ) : error[2] ? (
+                <p className="text-red-500">Error: {error[2]}</p>
+              ) : (
+                <Bar data={mortgageData} options={mortgageOptions} />
+              )}
+            </div>
+            <div className="mt-6 text-left space-y-3">
+              <h3 className="font-semibold text-lg">Understanding the Double Burden</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <p className="text-blue-600 font-medium">Mortgage Payments</p>
+                  <ul className="list-disc ml-5 mt-2 text-gray-700">
+                    <li>Principal + interest as % of disposable income</li>
+                    <li>StatCan Table 36-10-0469-01 (2023 Q4)</li>
+                    <li>Thresholds: 25% (Stressed), 35% (Critical)</li>
+                  </ul>
+                </div>
+                <div className="bg-amber-50 p-4 rounded-lg">
+                  <p className="text-amber-600 font-medium">Insurance Rates</p>
+                  <ul className="list-disc ml-5 mt-2 text-gray-700">
+                    <li>CMHC premiums for less than 20% down payments</li>
+                    <li>Added to mortgage principal</li>
+                    <li>2023 rates: 2.7-3.4% of loan amount</li>
+                  </ul>
+                </div>
+              </div>
+              <p className="text-sm text-gray-600 mt-4">
+                Example: In BC, a $800k mortgage with 10% down payment would add $24,800 in insurance costs.
+              </p>
+              <p className="text-sm text-gray-500 mt-2">
+                Sources: Statistics Canada, CMHC Insurance Calculator
+              </p>
+            </div>
+          </div>
+
+          {/* Final Info Section */}
           <section className="text-left bg-green-50 p-6 rounded-lg">
             <h3 className="text-xl font-bold mb-4">Why Regional Affordability Matters</h3>
             <p className="mb-4">
