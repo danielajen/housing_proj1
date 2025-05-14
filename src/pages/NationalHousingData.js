@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { 
-  Chart as ChartJS, 
-  CategoryScale, 
-  LinearScale, 
-  BarElement, 
-  Title, 
-  Tooltip, 
-  Legend 
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
 } from 'chart.js';
 
 ChartJS.register(
@@ -21,8 +21,36 @@ ChartJS.register(
 
 const NationalHousingData = () => {
   const [chartData, setChartData] = useState(null);
+  const [provinceChartData, setProvinceChartData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const processProvinceData = (responses) => {
+    const colors = [
+      'rgba(255, 99, 132, 0.7)',    // BC
+      'rgba(75, 192, 192, 0.7)',    // Alberta
+      'rgba(153, 102, 255, 0.7)',   // Ontario
+      'rgba(255, 159, 64, 0.7)'     // Quebec
+    ];
+
+    const labels = responses[0].object.vectorDataPoint
+      .slice()
+      .reverse()
+      .map(item => new Date(item.refPer).toLocaleDateString('en-CA', {
+        year: 'numeric',
+        month: 'short'
+      }));
+
+    const datasets = responses.map((response, i) => {
+      return {
+        label: ['BC', 'Alberta', 'Ontario', 'Quebec'][i],
+        data: response.object.vectorDataPoint.slice().reverse().map(item => Number(item.value)),
+        backgroundColor: colors[i]
+      };
+    });
+
+    return { labels, datasets };
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,73 +60,74 @@ const NationalHousingData = () => {
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify([{
-            vectorId: 32164132,
-            latestN: 12
-          }])
+          body: JSON.stringify([
+            { vectorId: 32164132, latestN: 4 }, // Vancouver
+            { vectorId: 32164134, latestN: 4 }, // BC
+            { vectorId: 32164136, latestN: 4 }, // Alberta
+            { vectorId: 32164142.3, latestN: 4 }, // Ontario
+            { vectorId: 32164144, latestN: 4 }  // Quebec
+          ])
         });
-      
+
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
         const responseData = await response.json();
-        
-        if (!Array.isArray(responseData) || responseData[0]?.status !== "SUCCESS") {
+
+        if (!Array.isArray(responseData) || responseData.some(r => r?.status !== "SUCCESS")) {
           throw new Error('Invalid API response structure');
         }
-      
-        const { vectorDataPoint } = responseData[0].object;
-        
-        if (!vectorDataPoint?.length) {
-          throw new Error('No housing data available');
-        }
-      
-        const processedData = vectorDataPoint.reverse().map(item => ({
+
+        // Vancouver data
+        const vancouverData = responseData[0].object.vectorDataPoint.reverse().map(item => ({
           date: new Date(item.refPer).toLocaleDateString('en-CA', {
             year: 'numeric',
             month: 'short'
           }),
           value: Number(item.value)
         }));
-        
+
         setChartData({
-          labels: processedData.map(d => d.date),
+          labels: vancouverData.map(d => d.date),
           datasets: [{
             label: 'Vancouver Housing Starts',
-            data: processedData.map(d => d.value),
+            data: vancouverData.map(d => d.value),
             backgroundColor: 'rgba(26, 52, 93, 0.7)',
             borderColor: 'rgba(26, 52, 93, 1)',
             borderWidth: 1
           }]
         });
+
+        // Provincial data (BC, Alberta, Ontario, Quebec)
+        const provincialResponses = responseData.slice(1);
+        const provinceData = processProvinceData(provincialResponses);
+        setProvinceChartData(provinceData);
+
       } catch (err) {
         setError(err.message);
         console.error('Data fetch error:', err);
       } finally {
         setLoading(false);
       }
-    }; // Added missing function closure
+    };
 
     fetchData();
   }, []);
 
-
-  // Chart configuration
-  const chartOptions = {
+  const chartOptions = (title) => ({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: { position: 'top' },
       title: {
         display: true,
-        text: 'Vancouver Monthly Housing Starts',
+        text: title,
         font: { size: 18 }
       }
     },
     scales: {
       y: {
         beginAtZero: true,
-        title: { 
-          display: true, 
+        title: {
+          display: true,
           text: 'Number of Units',
           font: { weight: 'bold' }
         }
@@ -111,11 +140,11 @@ const NationalHousingData = () => {
         }
       }
     }
-  };
+  });
 
   return (
     <div className="flex flex-col">
-      {/* Cleaned up hero section (remove duplicate) */}
+      {/* Hero Section */}
       <div style={{
         width: "100%",
         backgroundColor: "#1a365d",
@@ -124,7 +153,7 @@ const NationalHousingData = () => {
         backgroundImage: "url(/assets/main-banner.png)",
         backgroundSize: "cover",
         backgroundPosition: "center",
-        position: "relative",
+        position: "relative"
       }}>
         <div style={{
           position: "absolute",
@@ -132,7 +161,7 @@ const NationalHousingData = () => {
           backgroundColor: "#1a365d",
           opacity: 0.7
         }}></div>
-        
+
         <div style={{
           position: "relative",
           zIndex: 1,
@@ -156,37 +185,51 @@ const NationalHousingData = () => {
             Tracking Canada's Housing Starts
           </h2>
 
-          {/* Chart Section */}
+          {/* Vancouver Chart */}
           <div className="bg-gray-100 p-8 rounded shadow-md mb-10">
-      {loading && <p className="text-gray-600 text-center">Loading housing data...</p>}
-      {error && (
-        <div className="text-red-500 text-center">
-          <p>Error: {error}</p>
-          <p className="text-sm mt-2">
-            Please try refreshing the page or contact support
-          </p>
-        </div>
-      )}
-      
-      {chartData && !error && (
-        <div className="relative h-96">
-          <Bar 
-            data={chartData} 
-            options={chartOptions}
-          />
-          <p className="text-sm text-gray-600 mt-4 text-center">
-            Source: Statistics Canada - Vector ID 32164132 (Vancouver CMA)
-          </p>
-        </div>
-      )}
-    </div>
+            {loading && <p className="text-gray-600 text-center">Loading housing data...</p>}
+            {error && (
+              <div className="text-red-500 text-center">
+                <p>Error: {error}</p>
+                <p className="text-sm mt-2">
+                  Please try refreshing the page or contact support
+                </p>
+              </div>
+            )}
 
+            {chartData && !error && (
+              <div className="relative h-96">
+                <Bar
+                  data={chartData}
+                  options={chartOptions("Vancouver Monthly Housing Starts")}
+                />
+                <p className="text-sm text-gray-600 mt-4 text-center">
+                  Source: Statistics Canada - Vector ID 32164132 (Vancouver CMA)
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Provincial Chart */}
+          {provinceChartData && !error && (
+            <div className="bg-gray-100 p-8 rounded shadow-md mb-10">
+              <div className="relative h-96">
+                <Bar
+                  data={provinceChartData}
+                  options={chartOptions("Provincial Housing Starts (Last 7 Years)")}
+                />
+                <p className="text-sm text-gray-600 mt-4 text-center">
+                  Source: Statistics Canada - Vector IDs 32164134, 32164136, 32164142, 32164144
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Summary Section */}
           <div className="p-6 bg-blue-50 rounded-lg">
             <h3 className="text-xl font-bold mb-4">Why It Matters</h3>
             <p className="mb-3">
-              New home construction reflects how cities are preparing for population growth and 
+              New home construction reflects how cities are preparing for population growth and
               affordability needs. Vancouver continues to see strong demand despite increased construction.
             </p>
             <p className="text-sm text-gray-600">

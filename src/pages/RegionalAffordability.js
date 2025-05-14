@@ -1,232 +1,150 @@
-// import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import { Line } from "react-chartjs-2";
-// import {
-//   Chart as ChartJS,
-//   Title,
-//   Tooltip,
-//   Legend,
-//   LineElement,
-//   CategoryScale,
-//   LinearScale,
-//   PointElement,
-// } from "chart.js";
-
-// ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
-
-// const RegionalAffordability = () => {
-//   const [affordabilityData, setAffordabilityData] = useState(null);
-//   const [metadata, setMetadata] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-
-//   const fetchData = async (retries = 3) => {
-//     try {
-//       const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-//       const targetUrl = "https://www150.statcan.gc.ca/t1/wds/rest/getDataFromCubePidCoord";
-
-//       const response = await axios.get(
-//         `${proxyUrl}${targetUrl}`,
-//         {
-//           params: {
-//             pid: '17100005', // Housing Economic Account
-//             coordinate: '1.1.1.1.1' // Specific coordinate for affordability data
-//           },
-//           headers: {
-//             "Content-Type": "application/json",
-//             "X-Requested-With": "XMLHttpRequest",
-//             "Origin": window.location.origin
-//           },
-//           timeout: 15000
-//         }
-//       );
-
-//       if (!response.data?.object) {
-//         throw new Error("API request failed");
-//       }
-
-//       const series = response.data.object.vectorDataPoint;
-//       setMetadata({
-//         title: response.data.object.cubeTitle.en,
-//         frequency: series[0]?.frequencyCode || "Annual",
-//         geography: "Canada by Province"
-//       });
-
-//       setAffordabilityData({
-//         labels: series.map(item => item.refPer),
-//         datasets: [{
-//           label: "Affordability Ratio (Income/Housing Costs)",
-//           data: series.map(item => Number(item.value)),
-//           borderColor: "#e63946",
-//           backgroundColor: "rgba(230, 57, 70, 0.1)",
-//           fill: true,
-//           tension: 0.3
-//         }]
-//       });
-
-//       setLoading(false);
-//     } catch (error) {
-//       if (error.response?.status === 429 && retries > 0) {
-//         setError(`Rate limited - retrying in 2 seconds (${retries} left)`);
-//         await new Promise(resolve => setTimeout(resolve, 2000));
-//         return fetchData(retries - 1);
-//       }
-//       setError(error.message);
-//       setLoading(false);
-//     }
-//   };
-
-//   useEffect(() => { 
-//     fetchData(); 
-//   }, []);
-
-//   if (loading) return <div>Loading affordability data...</div>;
-//   if (error) return <div>Error: {error}</div>;
-//   if (!affordabilityData) return <div>No data available</div>;
-
-//   return (
-//     <div className="flex flex-col">
-//       <div className="flex justify-center items-start w-full h-[320px] bg-green-800 p-5">
-//         <div className="flex flex-col w-[90%] md:w-[50%] h-full justify-around text-center text-gray-100">
-//           <h1 className="text-4xl md:text-6xl tracking-tighter font-sans">
-//             Regional Housing Affordability
-//           </h1>
-//           <p className="text-gray-200">
-//             Comparing housing costs to incomes across Canadian regions
-//           </p>
-//         </div>
-//       </div>
-
-//       <div className="w-full bg-white py-10">
-//         <div className="max-w-5xl mx-auto">
-//           {metadata && (
-//             <div className="mb-8 p-4 bg-green-50 rounded-lg">
-//               <h4 className="font-bold">Dataset Information</h4>
-//               <p>Title: {metadata.title}</p>
-//               <p>Frequency: {metadata.frequency}</p>
-//               <p>Geography: {metadata.geography}</p>
-//             </div>
-//           )}
-
-//           <div className="bg-white p-6 rounded shadow-lg">
-//             <Line 
-//               data={affordabilityData}
-//               options={{
-//                 responsive: true,
-//                 plugins: {
-//                   title: {
-//                     display: true,
-//                     text: 'Housing Affordability Trends',
-//                     font: { size: 16 }
-//                   },
-//                 },
-//                 scales: {
-//                   y: {
-//                     beginAtZero: false,
-//                     title: {
-//                       display: true,
-//                       text: 'Affordability Ratio'
-//                     }
-//                   }
-//                 }
-//               }}
-//             />
-//           </div>
-
-//           <section className="mt-8 p-6 bg-green-50 rounded-lg">
-//             <h3 className="text-xl font-bold mb-3">Understanding Affordability</h3>
-//             <p className="mb-4">
-//               The affordability ratio compares median housing costs to median household incomes.
-//               Values below 1.0 indicate households spending more than 30% of income on housing,
-//               signaling affordability challenges in that region.
-//             </p>
-//             <footer className="text-sm text-gray-600">
-//               Source: Statistics Canada, {new Date().getFullYear()}.
-//             </footer>
-//           </section>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default RegionalAffordability;
-
-
-
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import { Line } from "react-chartjs-2";
-// import {
-//   Chart as ChartJS,
-//   Title,
-//   Tooltip,
-//   Legend,
-//   LineElement,
-//   CategoryScale,
-//   LinearScale,
-//   PointElement,
-// } from "chart.js";
+import { Bar } from "react-chartjs-2";
+import { 
+  Chart as ChartJS, 
+  CategoryScale, 
+  LinearScale, 
+  BarElement, 
+  Title, 
+  Tooltip, 
+  Legend 
+} from 'chart.js';
 
-// ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const RegionalAffordability = () => {
-  // teammate will implement API call and chart rendering logic
+  const [chartData, setChartData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/statcan", {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify([
+            { vectorId: 128597, latestN: 1 }, // Vancouver CMA
+            { vectorId: 128598, latestN: 1 }, // Toronto CMA
+            { vectorId: 128599, latestN: 1 }, // Montreal CMA
+            { vectorId: 128600, latestN: 1 }  // Halifax CMA
+          ])
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const responseData = await response.json();
+
+        if (!Array.isArray(responseData) || responseData.some(d => d.status !== "SUCCESS")) {
+          throw new Error('Invalid API response structure');
+        }
+
+        const cityNames = ["Vancouver CMA", "Toronto CMA", "Montreal CMA", "Halifax CMA"];
+
+        const processedData = responseData.map((item, index) => {
+          const point = item.object.vectorDataPoint?.[0];
+          return {
+            city: cityNames[index],
+            value: point ? Number(point.value) : 0
+          };
+        });
+
+        setChartData({
+          labels: processedData.map(d => d.city),
+          datasets: [{
+            label: 'Shelter-cost-to-income ratio (median)',
+            data: processedData.map(d => d.value),
+            backgroundColor: 'rgba(26, 52, 93, 0.7)',
+            borderColor: 'rgba(26, 52, 93, 1)',
+            borderWidth: 1
+          }]
+        });
+      } catch (err) {
+        setError(err.message);
+        console.error('Data fetch error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position: 'top' },
+      title: {
+        display: true,
+        text: 'Median Shelter-Cost-to-Income Ratio by CMA',
+        font: { size: 18 }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: { 
+          display: true, 
+          text: 'Shelter-Cost-to-Income Ratio (%)',
+          font: { weight: 'bold' }
+        }
+      },
+      x: {
+        title: {
+          display: true,
+          text: 'Census Metropolitan Area (CMA)',
+          font: { weight: 'bold' }
+        }
+      }
+    }
+  };
+
+  
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      {/* <div
-        className="flex justify-center items-start w-full h-[320px] bg-green-800 p-5"
-        style={{ backgroundImage: "url(/assets/main-banner.png)", backgroundSize: "cover", backgroundPosition: "center" }}
-      >
-        <div className="flex flex-col w-[90%] md:w-[50%] h-full justify-around text-center text-white">
-          <h1 className="text-4xl md:text-6xl tracking-tighter font-sans">
+      <div style={{
+        width: "100%",
+        backgroundColor: "#1a365d",
+        color: "white",
+        padding: "80px 20px",
+        backgroundImage: "url(/assets/main-banner.png)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        position: "relative"
+      }}>
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          backgroundColor: "#1a365d",
+          opacity: 0.7
+        }}></div>
+
+        <div style={{
+          position: "relative",
+          zIndex: 1,
+          maxWidth: "1000px",
+          margin: "0 auto",
+          textAlign: "center"
+        }}>
+          <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "20px" }}>
             Regional Housing Affordability
           </h1>
-          <p className="text-gray-100">
+          <p style={{ fontSize: "1.25rem", lineHeight: "1.7" }}>
             Comparing housing costs to incomes across Canadian provinces and territories.
           </p>
         </div>
-      </div> */}
+      </div>
 
-      <div style={{
-  width: "100%",
-  backgroundColor: "#1a365d",
-  color: "white",
-  padding: "80px 20px",
-  backgroundImage: "url(/assets/main-banner.png)",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  position: "relative",
-}}>
-  {/* Overlay */}
-  <div style={{
-    position: "absolute",
-    inset: 0,
-    backgroundColor: "#1a365d",
-    opacity: 0.7
-  }}></div>
-
-  {/* Content */}
-  <div style={{
-    position: "relative",
-    zIndex: 1,
-    maxWidth: "1000px",
-    margin: "0 auto",
-    textAlign: "center"
-  }}>
-    <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", marginBottom: "20px" }}>
-      Regional Housing Affordability
-    </h1>
-    <p style={{ fontSize: "1.25rem", lineHeight: "1.7" }}>
-      Comparing housing costs to incomes across Canadian provinces and territories.
-    </p>
-  </div>
-</div>
-
-
-      {/* Placeholder Content */}
       <div className="w-full bg-white py-12 px-4">
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-2xl font-bold mb-6">
@@ -238,10 +156,17 @@ const RegionalAffordability = () => {
             Data will reflect affordability ratios (housing cost vs household income) over time.
           </p>
 
-          {/* Chart Placeholder */}
+          {/* Chart Integration */}
           <div className="bg-gray-100 p-8 rounded shadow-md mb-10">
-            {/* TODO: Chart.js component to be implemented by teammate */}
-            <p className="text-gray-500">[Chart Placeholder ]</p>
+            <div style={{ position: "relative", width: "100%", height: "400px" }}>
+              {loading ? (
+                <p className="text-gray-500">Loading chart...</p>
+              ) : error ? (
+                <p className="text-red-500">Error: {error}</p>
+              ) : (
+                <Bar data={chartData} options={chartOptions} />
+              )}
+            </div>
           </div>
 
           <section className="text-left bg-green-50 p-6 rounded-lg">
