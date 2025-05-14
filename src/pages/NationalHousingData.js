@@ -136,7 +136,7 @@ const NationalHousingData = () => {
 
           <div className="bg-gray-100 p-8 rounded shadow-md mb-10">
             {/* TODO: Add Chart.js bar graph for national housing data */}
-            <p className="text-gray-500">[National Housing Chart Placeholder]</p>
+            <Bar data={nationalHousingData} options={yourOptionsHere} />
           </div>
 
           <div className="p-6 bg-blue-50 rounded-lg">
