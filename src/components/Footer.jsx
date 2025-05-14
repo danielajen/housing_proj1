@@ -165,7 +165,7 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div
+          {/* <div
             style={{
               flex: "1 1 200px",
               margin: "0 20px 30px 80px",
@@ -200,7 +200,59 @@ const Footer = () => {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
+
+  <style>
+    {`
+      @media (max-width: 768px) {
+        .quick-links {
+          margin: 0 10px 30px 10px !important;
+        }
+      }
+    `}
+  </style>
+
+  <div
+    className="quick-links"
+    style={{
+      flex: "1 1 200px",
+      margin: "0 20px 30px 80px", // default for desktop
+    }}
+  >
+    <h2 style={{ marginBottom: "20px", fontSize: "22px" }}>
+      QUICK LINKS
+    </h2>
+    <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
+      {[
+        ["Home", "/"],
+        ["About", "/about"],
+        ["National Housing ", "/national-housing-data"],
+        ["Regional Affordability", "/regional-affordability"],
+        ["Tenant Resources ", "/tenant-resources"],
+        ["Indigenous Housing ", "/indigenous-housing"],
+        ["News", "/news"],
+        ["Donation", "/donation"],
+        ["Housing Policy", "/housing-policy"],
+        ["Contact", "/contact"],
+      ].map(([label, path], i) => (
+        <li key={i} style={{ margin: "8px 0" }}>
+          <i
+            className="fa fa-arrow-circle-right"
+            style={{ marginRight: "10px" }}
+          ></i>
+          <Link
+            to={path}
+            style={{ color: "white", textDecoration: "none" }}
+          >
+            {label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+
+
 
           {/* Contact Us */}
           <div
