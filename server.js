@@ -4,19 +4,26 @@ const cors = require('cors');
 const axios = require('axios');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  methods: ['POST'] 
+}));
 app.use(express.json());
 
-// Proxy endpoint
 app.post('/api/statcan', async (req, res) => {
   try {
     const statcanResponse = await axios.post(
       'https://www150.statcan.gc.ca/t1/wds/rest/getDataFromVectorsAndLatestNPeriods',
       req.body
     );
+    console.log('StatCan Response:', statcanResponse.data);
     res.json(statcanResponse.data);
   } catch (error) {
-    res.status(500).json({ error: "Proxy error" });
+    console.error('Full Error:', error);
+    res.status(500).json({ 
+      error: error.message,
+      details: error.response?.data 
+    });
   }
 });
 

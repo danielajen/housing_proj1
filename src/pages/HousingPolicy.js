@@ -1,96 +1,10 @@
-import 'chartjs-adapter-date-fns';
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Scatter } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  LinearScale,
-  PointElement,
-} from "chart.js";
 
-import { TimeScale, CategoryScale } from "chart.js";
-
-ChartJS.register(Title, Tooltip, Legend, LinearScale, PointElement, TimeScale, CategoryScale);
+import React from "react";
 
 const HousingPolicy = () => {
-  const [policyData, setPolicyData] = useState(null);
-  const [metadata, setMetadata] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // Toronto-specific vector IDs
-  const TORONTO_VECTORS = [
-    32164132, // Example: Toronto housing starts
-    32164133, // Toronto building permits
-    32164134  // Toronto housing completions
-  ];
-
-  const fetchData = async (retries = 3) => {
-    try {
-      const response = await axios.post(
-        '/api/statcan', // Your proxy endpoint
-        TORONTO_VECTORS.map(vectorId => ({
-          vectorId: vectorId,
-          latestN: 24 // Get last 24 months of data
-        })),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          timeout: 15000
-        }
-      );
-
-      if (!response.data || response.data.status !== "SUCCESS") {
-        throw new Error("Failed to fetch data from StatCan");
-      }
-
-      // Process Toronto-specific data
-      const processedData = {
-        labels: response.data.object[0].vectorDataPoint.map(pt => 
-          new Date(pt.refPer).toLocaleDateString('en-CA', { month: 'short', year: 'numeric' })
-        ),
-        datasets: response.data.object.map((series, idx) => ({
-          label: series.vectorSymbolFr || `Series ${idx+1}`,
-          data: series.vectorDataPoint.map(pt => ({
-            x: new Date(pt.refPer).getTime(),
-            y: Number(pt.value)
-          })),
-          backgroundColor: `rgba(${75 + idx*50}, ${192 - idx*30}, ${192 - idx*50}, 0.6)`,
-          pointRadius: 6
-        }))
-      };
-
-      setMetadata({
-        title: "Toronto Housing Metrics",
-        lastUpdated: response.data.object[0].modifiedDate,
-        source: "Statistics Canada"
-      });
-
-      setPolicyData(processedData);
-      setLoading(false);
-    } catch (error) {
-      if (error.response?.status === 429 && retries > 0) {
-        setError(`Rate limited - retrying in 2 seconds (${retries} left)`);
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        return fetchData(retries - 1);
-      }
-      setError(error.message);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => { 
-    fetchData(); 
+  React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  if (loading) return <div>Loading Toronto housing data...</div>;
-  if (error) return <div>Error: {error}</div>;
-  if (!policyData) return <div>No data available</div>;
 
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
@@ -116,43 +30,6 @@ const HousingPolicy = () => {
             Learn how policies shape access to housing, who makes them, and what you can do to influence change.
           </p>
         </div>
-      </div>
-
-      {/* Chart Section */}
-      <div className="bg-white p-6 rounded shadow-lg">
-        <Scatter 
-          data={policyData}
-          options={{
-            responsive: true,
-            plugins: {
-              title: {
-                display: true,
-                text: 'Toronto Housing Trends',
-              },
-            },
-            scales: {
-              x: {
-                type: 'time',
-                time: {
-                  unit: 'month',
-                  displayFormats: {
-                    month: 'MMM yyyy'
-                  }
-                },
-                title: {
-                  display: true,
-                  text: 'Date'
-                }
-              },
-              y: {
-                title: {
-                  display: true,
-                  text: 'Value'
-                }
-              }
-            }
-          }}
-        />
       </div>
 
       {/* Policy Cards */}
