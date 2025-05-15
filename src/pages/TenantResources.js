@@ -37,6 +37,7 @@ const TenantResources = () => {
   const [housingData, setHousingData] = useState(null);
   const [rentGrowthData, setRentGrowthData] = useState(null);
   const [evictionData, setEvictionData] = useState(null);
+  const [vacancyData, setVacancyData] = useState(null);
   
   const [loading, setLoading] = useState([true, true, true, true, true]);
   const [error, setError] = useState([null, null, null, null, null]);
@@ -90,7 +91,78 @@ const TenantResources = () => {
         setLoading(prev => [false, prev[1], prev[2], prev[3], prev[4]]);
       }
     };
-    
+    // Vacancy Rates in CMAs
+    const fetchVacancyRates = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/api/statcan", {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify([
+            { vectorId: 733349, latestN: 1 },  // Toronto, ON
+            { vectorId: 733355, latestN: 1 },  // Montréal, QC
+            { vectorId: 733351, latestN: 1 },  // Vancouver, BC
+            { vectorId: 733335, latestN: 1 },  // Calgary, AB
+            { vectorId: 733356, latestN: 1 },  // Edmonton, AB
+            { vectorId: 733336, latestN: 1 },  // Ottawa-Gatineau, ON/QC
+            { vectorId: 733354, latestN: 1 },  // Winnipeg, MB
+            { vectorId: 733339, latestN: 1 },  // Québec, QC
+            { vectorId: 733358, latestN: 1 },  // Hamilton, ON
+            { vectorId: 733359, latestN: 1 }   // Kitchener-Cambridge-Waterloo, ON
+])
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+
+        const regions = [
+          "Toronto", 
+          "Montréal", 
+          "Vancouver", 
+          "Calgary", 
+          "Edmonton", 
+          "Ottawa-Gatineau", 
+          "Winnipeg", 
+          "Québec", 
+          "Hamilton", 
+          "Kitchener-Cambridge-Waterloo"
+        ];
+        
+        const backgroundColors = [
+          '#76b7b2', '#76b7b2', '#76b7b2', '#76b7b2', '#76b7b2',
+          '#76b7b2', '#76b7b2', '#76b7b2', '#76b7b2', '#76b7b2'
+        ];
+        
+        const borderColors = [
+          '#2c3e50', '#2c3e50', '#2c3e50', '#2c3e50', '#2c3e50',
+          '#2c3e50', '#2c3e50', '#2c3e50', '#2c3e50', '#2c3e50'
+        ];
+
+        const processedDataset = data.map((regionData, index) => ({
+          label: regions[index],
+          value: regionData?.object?.vectorDataPoint?.[0]?.value || 0,
+          backgroundColor: backgroundColors[index],
+          borderColor: borderColors[index]
+        }));
+
+        setVacancyData({
+          labels: processedDataset.map(d => d.label),
+          datasets: [{
+            label: 'Vacancy Rate (%)',
+            data: processedDataset.map(d => d.value),
+            backgroundColor: processedDataset[0].backgroundColor,
+            borderColor: processedDataset[0].borderColor,
+            borderWidth: 1,
+            borderRadius: 5
+          }]
+        });
+
+        setLoading([false]);
+      } catch (err) {
+        setError([err.message]);
+        setLoading([false]);
+      }
+    };
+
 // 2. Median Assessment Value Growth (Line Chart)
 const fetchAssessmentGrowth = async () => {
   try {
@@ -169,6 +241,7 @@ const fetchAssessmentGrowth = async () => {
       }
     };
 
+    fetchVacancyRates();
     fetchHousingTransit();
     fetchAssessmentGrowth();
     fetchEvictions();
@@ -292,6 +365,69 @@ const fetchAssessmentGrowth = async () => {
       {loading[0] && <div>Loading transit data...</div>}
       {error[0] && <div style={{ color: 'red' }}>Error loading housing data</div>}
     </div>
+
+{/* vacancy */}
+    <div style={{ 
+  background: '#fff', 
+  padding: '20px', 
+  borderRadius: '8px', 
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)', 
+  minHeight: '600px' 
+}}>
+  <h3 style={{ color: '#2c3e50', marginBottom: '15px' }}>Rental Vacancy Rates in Major Canadian Cities</h3>
+  
+  <div style={{ height: '400px', position: 'relative' }}>
+    {vacancyData && <Bar 
+      data={vacancyData}
+      options={{
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top' }
+        },
+        scales: {
+          y: {
+            ticks: {
+              callback: (value) => `${value}%`
+            },
+            title: {
+              display: true,
+              text: 'Vacancy Rate (%)'
+            }
+          },
+          x: {
+            title: {
+              display: true,
+              text: 'City'
+            }
+          }
+        }
+      }} 
+    />}
+  </div>
+
+  <div style={{ marginTop: '15px' }}>
+  <h4>2024 Key Insights</h4>
+  <ul>
+    <li><strong>Toronto:</strong> Growing rental demand driven by strong job market and immigration</li>
+    <li><strong>Montréal:</strong> Moderate vacancy amid steady population growth and new developments</li>
+    <li><strong>Vancouver:</strong> Low vacancy due to limited new supply and high demand</li>
+    <li><strong>Calgary:</strong> Higher vacancy due to recent housing development booms</li>
+    <li><strong>Edmonton:</strong> Rising vacancy reflecting slower economic growth</li>
+    <li><strong>Ottawa-Gatineau:</strong> Stable rental market with balanced supply and demand</li>
+    <li><strong>Winnipeg:</strong> Slightly tightening market with modest rental increases</li>
+    <li><strong>Québec:</strong> Consistent vacancy rates with gradual urban expansion</li>
+    <li><strong>Hamilton:</strong> Tight rental market reflecting urban growth pressure</li>
+    <li><strong>Kitchener-Cambridge-Waterloo:</strong> Increasing vacancy as new developments come online</li>
+  </ul>
+  <div style={{ fontSize: '0.9em', color: '#666' }}>
+    Source: Statistics Canada (Custom API via Table 34-10-0169-01)
+  </div>
+</div>
+
+{loading[0] && <div>Loading vacancy data...</div>}
+{error[0] && <div style={{ color: 'red' }}>Error loading vacancy data}</div>}
+</div>
 
 
 
