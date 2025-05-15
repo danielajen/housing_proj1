@@ -256,7 +256,7 @@ const fetchAssessmentGrowth = async () => {
           backgroundColor: "#1a365d",
           color: "white",
           padding: "80px 20px",
-          backgroundImage: "url(/assets/main-banner.png)",
+          backgroundImage: "url(/assets/tenant.png)",
           backgroundSize: "cover",
           backgroundPosition: "center",
           position: "relative",
@@ -426,7 +426,7 @@ const fetchAssessmentGrowth = async () => {
 </div>
 
 {loading[0] && <div>Loading vacancy data...</div>}
-{error[0] && <div style={{ color: 'red' }}>Error loading vacancy data}</div>}
+{error[0] && <div style={{ color: 'red' }}>Error loading vacancy data</div>}
 </div>
 
 

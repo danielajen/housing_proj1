@@ -66,7 +66,7 @@ const News = () => {
       </div> */}
 
     <div className="w-full text-white px-4 py-20 relative" style={{
-  backgroundImage: "url('/assets/main-banner.png')",
+  backgroundImage: "url('/assets/news.jpg')",
   backgroundSize: "cover",
   backgroundPosition: "center",
 }}>

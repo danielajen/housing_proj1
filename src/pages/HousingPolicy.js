@@ -15,7 +15,7 @@ const HousingPolicy = () => {
           backgroundColor: "#1a365d",
           color: "white",
           padding: "80px 20px",
-          backgroundImage: "url(/assets/main-banner.png)",
+          backgroundImage: "url(/assets/policy.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
           position: "relative",
