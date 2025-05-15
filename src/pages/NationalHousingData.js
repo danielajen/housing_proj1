@@ -203,9 +203,33 @@ const NationalHousingData = () => {
                   data={chartData}
                   options={chartOptions("Vancouver Monthly Housing Starts")}
                 />
-                <p className="text-sm text-gray-600 mt-4 text-center">
+
+                
+                {/* <p className="text-sm text-gray-600 mt-5 text-center">
                   Source: Statistics Canada - Vector ID 32164132 (Vancouver CMA)
-                </p>
+                </p> */}
+          <style>
+{`
+  @media (max-width: 480px) {
+    .responsive-source-text {
+      margin-top: 32px !important;
+    }
+
+    .responsive-source-text-2 {
+      margin-top: 32px !important;
+    }
+  }
+`}
+</style>
+
+
+                <p className="text-sm text-gray-600 mt-5 text-center responsive-source-text">
+  Source: Statistics Canada - Vector ID 32164132 (Vancouver CMA)
+</p>
+
+
+                
+                
               </div>
             )}
           </div>
@@ -218,9 +242,14 @@ const NationalHousingData = () => {
                   data={provinceChartData}
                   options={chartOptions("Provincial Housing Starts (Last 7 Years)")}
                 />
-                <p className="text-sm text-gray-600 mt-4 text-center">
+                {/* <p className="text-sm text-gray-600 mt-5 text-center">
                   Source: Statistics Canada - Vector IDs 32164134, 32164136, 32164142, 32164144
-                </p>
+                </p> */}
+
+                <p className="text-sm text-gray-600 mt-5 text-center responsive-source-text-2">
+  Source: Statistics Canada - Vector IDs 32164134, 32164136, 32164142, 32164144
+</p>
+
               </div>
             </div>
           )}
