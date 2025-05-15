@@ -49,46 +49,48 @@ const TenantResources = () => {
           method: 'POST',
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify([
-            { vectorId: 1001746870, latestN: 1  }, // Canada
-            { vectorId: 1001746876,  latestN: 1  }, // Ontario
-            { vectorId: 1001746871,  latestN: 1  }, // Newfoundland
-            { vectorId: 1001746872,  latestN: 1 }  // PEI
+            { vectorId: 1001746870, latestN: 1 }, // Canada
+            { vectorId: 1001746876, latestN: 1 }, // Ontario
+            { vectorId: 1001746871, latestN: 1 }, // Newfoundland
+            { vectorId: 1001746872, latestN: 1 }  // PEI
           ])
         });
     
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
-        const rawData = await response.json();
-        
-        // Simplified processing like evictions component
-        const processedData = rawData.map(region => ({
-          label: {
-            1001746870: "Canada",
-            1001746876: "Ontario",
-            1001746871: "Newfoundland",
-            1001746872: "PEI"
-          }[region.vectorId],
-          value: region?.object?.vectorDataPoint?.[0]?.value || 0
+    
+        const data = await response.json();
+    
+        const regions = ["Canada", "PEI", "Newfoundland", "Ontario"];
+        const backgroundColors = ['#4e79a7', '#4e79a7', '#4e79a7', '#4e79a7'];  // all same color, adjust if needed
+        const borderColors = ['#2c3e50', '#2c3e50', '#2c3e50', '#2c3e50'];
+    
+        // Process data to extract label and value for each region
+        const processedDataset = data.map((regionData, index) => ({
+          label: regions[index],
+          value: regionData?.object?.vectorDataPoint?.[0]?.value || 0,
+          backgroundColor: backgroundColors[index],
+          borderColor: borderColors[index]
         }));
     
         setHousingData({
-          labels: processedData.map(d => d.label),
+          labels: processedDataset.map(d => d.label),
           datasets: [{
             label: 'Housing Near Transit (%)',
-            data: processedData.map(d => d.value),
-            backgroundColor: '#4e79a7',
-            borderColor: '#2c3e50',
+            data: processedDataset.map(d => d.value),
+            backgroundColor: processedDataset[0].backgroundColor,
+            borderColor: processedDataset[0].borderColor,
             borderWidth: 1,
             borderRadius: 5
           }]
         });
-        
+    
         setLoading(prev => [false, prev[1], prev[2], prev[3], prev[4]]);
       } catch (err) {
         setError(prev => [err.message, prev[1], prev[2], prev[3], prev[4]]);
         setLoading(prev => [false, prev[1], prev[2], prev[3], prev[4]]);
       }
     };
+    
 // 2. Median Assessment Value Growth (Line Chart)
 const fetchAssessmentGrowth = async () => {
   try {
@@ -115,7 +117,7 @@ const fetchAssessmentGrowth = async () => {
         .map(d => d.value);
       
       return {
-        label: ["British Columbia", "Ontario", "Alberta", "Manitoba"][index],
+        label: ["Ontario", "British Columbia", "Manitoba", "Alberta"][index],
         data: rawValues,
         borderColor: ["#e15759", "#4e79a7", "#f28e2b", "#59a14f"][index]
       };
@@ -249,47 +251,47 @@ const fetchAssessmentGrowth = async () => {
         margin: '0 auto'
       }}>
         {/* Social Housing Transit */}
-<div style={{ 
-  background: '#fff', 
-  padding: '20px', 
-  borderRadius: '8px', 
-  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  minHeight: '600px'
-}}>
-  <h3 style={{ color: '#2c3e50', marginBottom: '15px' }}>Transit-Accessible Social Housing</h3>
-  <div style={{ height: '400px', position: 'relative' }}>
-    {housingData && <Bar 
-      data={housingData} 
-      options={{ 
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { position: 'top' }
-        },
-        scales: {
-          y: {
-            ticks: {
-              callback: (value) => `${value}%`
+        <div style={{ 
+      background: '#fff', 
+      padding: '20px', 
+      borderRadius: '8px', 
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      minHeight: '600px'
+    }}>
+      <h3 style={{ color: '#2c3e50', marginBottom: '15px' }}>Transit-Accessible Social Housing</h3>
+      <div style={{ height: '400px', position: 'relative' }}>
+        {housingData && <Bar 
+          data={housingData} 
+          options={{ 
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { position: 'top' }
+            },
+            scales: {
+              y: {
+                ticks: {
+                  callback: (value) => `${value}%`
+                }
+              }
             }
-          }
-        }
-      }} 
-    />}
-  </div>
-  <div style={{ marginTop: '15px' }}>
-    <h4>2020 Key Metrics</h4>
-    <ul>
-      <li><strong>Ontario 91.6%:</strong> Highest transit-connected social housing</li>
-      <li><strong>Canada 74.4%:</strong> National average accessibility</li>
-      <li><strong>PEI 37.4%:</strong> Rural access challenges</li>
-    </ul>
-    <div style={{ fontSize: '0.9em', color: '#666' }}>
-      Source: Statistics Canada Table 46-10-0013-01
+          }} 
+        />}
+      </div>
+      <div style={{ marginTop: '15px' }}>
+        <h4>2020 Key Metrics</h4>
+        <ul>
+          <li><strong>Ontario 91.6%:</strong> Highest transit-connected social housing</li>
+          <li><strong>Canada 74.4%:</strong> National average accessibility</li>
+          <li><strong>PEI 37.4%:</strong> Rural access challenges</li>
+        </ul>
+        <div style={{ fontSize: '0.9em', color: '#666' }}>
+          Source: Statistics Canada Table 46-10-0013-01
+        </div>
+      </div>
+      {loading[0] && <div>Loading transit data...</div>}
+      {error[0] && <div style={{ color: 'red' }}>Error loading housing data</div>}
     </div>
-  </div>
-  {loading[0] && <div>Loading transit data...</div>}
-  {error[0] && <div style={{ color: 'red' }}>Error loading housing data</div>}
-</div>
 
 
 
@@ -371,10 +373,10 @@ const fetchAssessmentGrowth = async () => {
             <h4>Housing Instability</h4>
             <p>2023 Filings per 1,000 Units:</p>
             <ul>
-              <li><strong>BC 22.4:</strong> 68% renovictions</li>
-              <li><strong>ON 18.7:</strong> Post-COVID backlog</li>
-              <li><strong>QC 12.1:</strong> Strong tenant laws</li>
-              <li><strong>AB 15.9:</strong> Energy sector impacts</li>
+              <li><strong>BC Low:</strong> 68% renovictions</li>
+              <li><strong>ON High:</strong> Post-COVID backlog</li>
+              <li><strong>QC High:</strong> Strong tenant laws</li>
+              <li><strong>AB High:</strong> Energy sector impacts</li>
             </ul>
             <div style={{ fontSize: '0.9em', color: '#666' }}>
               Source: Canadian Housing Survey
