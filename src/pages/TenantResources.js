@@ -34,124 +34,106 @@ const lineChartPlugins = [
 ChartJS.register(...lineChartPlugins);
 
 const TenantResources = () => {
-  const [investmentData, setInvestmentData] = useState(null);
-  const [mortgageData, setMortgageData] = useState(null);
+  const [housingData, setHousingData] = useState(null);
   const [rentGrowthData, setRentGrowthData] = useState(null);
-  const [currentRentData, setCurrentRentData] = useState(null);
   const [evictionData, setEvictionData] = useState(null);
   
   const [loading, setLoading] = useState([true, true, true, true, true]);
   const [error, setError] = useState([null, null, null, null, null]);
 
   useEffect(() => {
-    // 1. Residential Investment
-    const fetchConstructionInvestment = async () => {
+    // 1. Social Housing Transit Proximity
+    const fetchHousingTransit = async () => {
       try {
         const response = await fetch("http://localhost:3001/api/statcan", {
           method: 'POST',
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify([
-            { vectorId: 3410028601, latestN: 10 }, // Canada Total (2024 Table ID)
-            { vectorId: 3410028602, latestN: 10 }, // British Columbia
-            { vectorId: 3410028603, latestN: 10 }, // Ontario
-            { vectorId: 3410028604, latestN: 10 }, // Quebec
-            { vectorId: 3410028605, latestN: 10 }  // Alberta
+            { vectorId: 1001746870, latestN: 1  }, // Canada
+            { vectorId: 1001746876,  latestN: 1  }, // Ontario
+            { vectorId: 1001746871,  latestN: 1  }, // Newfoundland
+            { vectorId: 1001746872,  latestN: 1 }  // PEI
           ])
         });
-
+    
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
         
-        setInvestmentData({
-          labels: ["BC", "ON", "QC", "AB"],
+        const rawData = await response.json();
+        
+        // Simplified processing like evictions component
+        const processedData = rawData.map(region => ({
+          label: {
+            1001746870: "Canada",
+            1001746876: "Ontario",
+            1001746871: "Newfoundland",
+            1001746872: "PEI"
+          }[region.vectorId],
+          value: region?.object?.vectorDataPoint?.[0]?.value || 0
+        }));
+    
+        setHousingData({
+          labels: processedData.map(d => d.label),
           datasets: [{
-            label: 'Residential Investment (Q3 2023, $M CAD)',
-            data: data.map(d => d?.object?.vectorDataPoint?.[0]?.value || 0),
-            backgroundColor: ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2'],
-            borderColor: ['#2d4263', '#c86d1a', '#b83537', '#529692'],
+            label: 'Housing Near Transit (%)',
+            data: processedData.map(d => d.value),
+            backgroundColor: '#4e79a7',
+            borderColor: '#2c3e50',
             borderWidth: 1,
             borderRadius: 5
           }]
         });
+        
         setLoading(prev => [false, prev[1], prev[2], prev[3], prev[4]]);
       } catch (err) {
         setError(prev => [err.message, prev[1], prev[2], prev[3], prev[4]]);
+        setLoading(prev => [false, prev[1], prev[2], prev[3], prev[4]]);
       }
     };
+// 2. Median Assessment Value Growth (Line Chart)
+const fetchAssessmentGrowth = async () => {
+  try {
+    const response = await fetch("http://localhost:3001/api/statcan", {
+      method: 'POST',
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify([
+        { vectorId: 1266211318, latestN: 2 }, // British Columbia (Vancouver)
+        { vectorId: 1265449918, latestN: 2 }, // Ontario (Toronto)
+        { vectorId: 1572847103, latestN: 2 }, // Alberta (Calgary)
+        { vectorId: 1373072410, latestN: 2 }  // Manitoba
+      ])
+    });
 
-    // 2. Mortgage Rates (Line Chart)
-    const fetchMortgageTrends = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/api/statcan", {
-          method: 'POST',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify([{ vectorId: 10100364, latestN: 10 }])
-        });
-
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        const rateData = data[0]?.object?.vectorDataPoint?.slice(-120) || [];
-        
-        setMortgageData({
-          labels: rateData.map(d => new Date(d.refPeriod).getFullYear()),
-          datasets: [{
-            label: '5-Year Fixed Mortgage Rate (%)',
-            data: rateData.map(d => d.value),
-            borderColor: '#59a14f',
-            tension: 0.3,
-            pointRadius: 2
-          }]
-        });
-        setLoading(prev => [prev[0], false, prev[2], prev[3], prev[4]]);
-      } catch (err) {
-        setError(prev => [prev[0], err.message, prev[2], prev[3], prev[4]]);
-      }
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    
+    const data = await response.json();
+    
+    // Structure data for 2021-2022
+    const years = [2021, 2022];
+    const processData = (cityData, index) => {
+      const rawValues = cityData.object.vectorDataPoint
+        .slice(0, 2) // Get latest 2 years
+        .map(d => d.value);
+      
+      return {
+        label: ["British Columbia", "Ontario", "Alberta", "Manitoba"][index],
+        data: rawValues,
+        borderColor: ["#e15759", "#4e79a7", "#f28e2b", "#59a14f"][index]
+      };
     };
 
-    // 3. 10-Year Rent Growth (Line Chart)
-    const fetchRentGrowth = async () => {
-      try {
-        const response = await fetch("http://localhost:3001/api/statcan", {
-          method: 'POST',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify([
-            { vectorId: 3410045501, latestN: 5 }, // Vancouver Annual (2017-2021)
-            { vectorId: 3410045502, latestN: 5 }, // Toronto Annual
-            { vectorId: 3410045503, latestN: 5 }, // Montreal Annual
-            { vectorId: 3410045504, latestN: 5 }  // Calgary Annual
-          ])
-        });
-    
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        
-        const data = await response.json();
-        
-        // Verify and structure data
-        const years = [2017, 2018, 2019, 2020, 2021];
-        const processData = (cityData, index) => {
-          const rawValues = cityData.object.vectorDataPoint
-            .slice(0, 5) // Get first 5 entries (2017-2021)
-            .map(d => d.value);
-          
-          return {
-            label: ["Vancouver", "Toronto", "Montreal", "Calgary"][index],
-            data: rawValues,
-            borderColor: ["#e15759", "#4e79a7", "#f28e2b", "#59a14f"][index]
-          };
-        };
-    
-        setRentGrowthData({
-          labels: years,
-          datasets: data.map(processData)
-        });
-    
-      } catch (err) {
-        console.error("Rent growth fetch failed:", err);
-        setError(prev => [prev[0], prev[1], err.message, prev[3], prev[4]]);
-      }
-    };
+    setRentGrowthData({
+      labels: years,
+      datasets: data.map(processData)
+    });
 
-    // 5. Eviction Filings (Bar Chart)
+  } catch (err) {
+    console.error("Assessment growth fetch failed:", err);
+    setError(prev => [prev[0], prev[1], err.message, prev[3], prev[4]]);
+  }
+};
+    
+
+    // 3. Eviction Filings (Bar Chart)
     const fetchEvictions = async () => {
       try {
         const response = await fetch("http://localhost:3001/api/statcan", {
@@ -185,17 +167,8 @@ const TenantResources = () => {
       }
     };
 
-    const createRentDataset = (label, dataItem, color) => ({
-      label,
-      data: dataItem?.object?.vectorDataPoint?.map(d => d.value) || [],
-      borderColor: color,
-      tension: 0.2,
-      pointRadius: 2
-    });
-
-    fetchConstructionInvestment();
-    fetchMortgageTrends();
-    fetchRentGrowth();
+    fetchHousingTransit();
+    fetchAssessmentGrowth();
     fetchEvictions();
   }, []);
 
@@ -275,118 +248,103 @@ const TenantResources = () => {
         maxWidth: '1400px',
         margin: '0 auto'
       }}>
-        {/* Residential Investment */}
-        <div style={{ 
-          background: '#fff', 
-          padding: '20px', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          minHeight: '600px'
-        }}>
-          <h3 style={{ color: '#2c3e50', marginBottom: '15px' }}>Residential Construction Investment</h3>
-          <div style={{ height: '400px', position: 'relative' }}>
-            {investmentData && <Bar 
-              data={investmentData} 
-              options={{ 
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: { position: 'top' }
-                }
-              }} 
-            />}
-          </div>
-          <div style={{ marginTop: '15px' }}>
-            <h4>Market Impact Analysis</h4>
-            <p>Residential construction investment directly correlates with housing supply development:</p>
-            <ul>
-              <li><strong>British Columbia ($1.2B):</strong> High-density urban housing focus</li>
-              <li><strong>Ontario ($3.4B):</strong> Suburban greenbelt development</li>
-              <li><strong>Quebec ($890M):</strong> Mixed-use urban core projects</li>
-              <li><strong>Alberta ($610M):</strong> Workforce housing near oil sands</li>
-            </ul>
-            <div style={{ fontSize: '0.9em', color: '#666' }}>
-              Source: Statistics Canada Table 36-10-0106-01
-            </div>
-          </div>
-          {loading[0] && <div>Loading construction data...</div>}
-          {error[0] && <div style={{ color: 'red' }}>Error loading investment data</div>}
-        </div>
+        {/* Social Housing Transit */}
+<div style={{ 
+  background: '#fff', 
+  padding: '20px', 
+  borderRadius: '8px', 
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+  minHeight: '600px'
+}}>
+  <h3 style={{ color: '#2c3e50', marginBottom: '15px' }}>Transit-Accessible Social Housing</h3>
+  <div style={{ height: '400px', position: 'relative' }}>
+    {housingData && <Bar 
+      data={housingData} 
+      options={{ 
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top' }
+        },
+        scales: {
+          y: {
+            ticks: {
+              callback: (value) => `${value}%`
+            }
+          }
+        }
+      }} 
+    />}
+  </div>
+  <div style={{ marginTop: '15px' }}>
+    <h4>2020 Key Metrics</h4>
+    <ul>
+      <li><strong>Ontario 91.6%:</strong> Highest transit-connected social housing</li>
+      <li><strong>Canada 74.4%:</strong> National average accessibility</li>
+      <li><strong>PEI 37.4%:</strong> Rural access challenges</li>
+    </ul>
+    <div style={{ fontSize: '0.9em', color: '#666' }}>
+      Source: Statistics Canada Table 46-10-0013-01
+    </div>
+  </div>
+  {loading[0] && <div>Loading transit data...</div>}
+  {error[0] && <div style={{ color: 'red' }}>Error loading housing data</div>}
+</div>
 
-        {/* Mortgage Rates */}
-        <div style={{ 
-          background: '#fff', 
-          padding: '20px', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          minHeight: '600px'
-        }}>
-          <h3 style={{ color: '#2c3e50', marginBottom: '15px' }}>10-Year Mortgage Rate Trends</h3>
-          <div style={{ height: '400px', position: 'relative' }}>
-            {mortgageData && <Line 
-              data={mortgageData} 
-              options={{ 
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: { position: 'top' }
-                }
-              }} 
-            />}
-          </div>
-          <div style={{ marginTop: '15px' }}>
-            <h4>Borrowing Cost Timeline</h4>
-            <p>Key rate impacts on housing markets:</p>
-            <ul>
-              <li><strong>2019 Low (2.45%):</strong> Fueled COVID housing surge</li>
-              <li><strong>2023 Peak (5.85%):</strong> Reduced buyer eligibility</li>
-              <li><strong>Stress Test:</strong> 7.25% qualification threshold</li>
-            </ul>
-            <div style={{ fontSize: '0.9em', color: '#666' }}>
-              Source: Bank of Canada Rate History
-            </div>
-          </div>
-          {loading[1] && <div>Loading rate data...</div>}
-          {error[1] && <div style={{ color: 'red' }}>Error loading mortgage data</div>}
-        </div>
 
-        {/* Rent Growth */}
-        <div style={{ 
-          background: '#fff', 
-          padding: '20px', 
-          borderRadius: '8px', 
-          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-          minHeight: '600px'
-        }}>
-          <h3 style={{ color: '#2c3e50', marginBottom: '15px' }}>Decade of Rent Inflation</h3>
-          <div style={{ height: '400px', position: 'relative' }}>
-            {rentGrowthData && <Line 
-              data={rentGrowthData} 
-              options={{ 
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: { position: 'top' }
-                }
-              }} 
-            />}
-          </div>
-          <div style={{ marginTop: '15px' }}>
-            <h4>Rental Market Pressures</h4>
-            <p>Cumulative increases 2013-2023:</p>
-            <ul>
-              <li><strong>Vancouver +62%:</strong> &lt;1% vacancy since 2016</li>
-              <li><strong>Toronto +58%:</strong> 48% income-to-rent ratio</li>
-              <li><strong>Montreal +41%:</strong> STR regulations impact</li>
-              <li><strong>Calgary +37%:</strong> Migration-driven demand</li>
-            </ul>
-            <div style={{ fontSize: '0.9em', color: '#666' }}>
-              Source: CMHC Rental Market Survey
-            </div>
-          </div>
-          {loading[2] && <div>Loading rent history...</div>}
-          {error[2] && <div style={{ color: 'red' }}>Error loading rent trends</div>}
-        </div>
+
+        {/* Property Assessment Trends */}
+<div style={{ 
+  background: '#fff', 
+  padding: '20px', 
+  borderRadius: '8px', 
+  boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+  minHeight: '600px'
+}}>
+  <h3 style={{ color: '#2c3e50', marginBottom: '15px' }}>Property Valuation Trends</h3>
+  <div style={{ height: '400px', position: 'relative' }}>
+    {rentGrowthData && <Line 
+      data={rentGrowthData} 
+      options={{ 
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: 'top' },
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const label = context.dataset.label || '';
+                const value = context.parsed.y.toLocaleString();
+                return `${label}: $${value}`;
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            ticks: {
+              callback: (value) => `$${value.toLocaleString()}`
+            }
+          }
+        }
+      }} 
+    />}
+  </div>
+  <div style={{ marginTop: '15px' }}>
+    <h4>2021-2022 Assessment Changes</h4>
+    <ul>
+      <li><strong>BC +25.8%:</strong> $766K → $964K median valuation</li>
+      <li><strong>Ontario +3.3%:</strong> $423K → $437K median</li>
+      <li><strong>Alberta +6.3%:</strong> $400K → $425K assessment</li>
+      <li><strong>Manitoba +1.0%:</strong> $303K → $306K average</li>
+    </ul>
+    <div style={{ fontSize: '0.9em', color: '#666' }}>
+      Source: Statistics Canada Table 46-10-0051-01 (2021-2022)
+    </div>
+  </div>
+  {loading[2] && <div>Loading property valuations...</div>}
+  {error[2] && <div style={{ color: 'red' }}>Error loading assessment data</div>}
+</div>
 
         {/* Evictions */}
         <div style={{ 
