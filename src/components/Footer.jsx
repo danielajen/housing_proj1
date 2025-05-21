@@ -231,7 +231,7 @@ const Footer = () => {
         ["Tenant Resources ", "/tenant-resources"],
         ["Indigenous Housing ", "/indigenous-housing"],
         ["News", "/news"],
-        ["Donation", "/donation"],
+      
         ["Housing Policy", "/housing-policy"],
         ["Contact", "/contact"],
       ].map(([label, path], i) => (

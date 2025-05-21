@@ -119,7 +119,7 @@ const Header = ({ path, User }) => {
           </div>
 
           <Link to="/news" style={linkStyle("/news")}>News</Link>
-          <Link to="/donation" style={linkStyle("/donation")}>Donation</Link>
+          
           <Link to="/housing-policy" style={linkStyle("/housing-policy")}>Housing Policy</Link>
           <Link to="/contact" style={linkStyle("/contact")}>Contact</Link>
         </div>
@@ -143,7 +143,7 @@ const Header = ({ path, User }) => {
             Indigenous Housing
           </Link>
           <Link to="/news" style={linkStyle("/news")}>News</Link>
-          <Link to="/donation" style={linkStyle("/donation")}>Donation</Link>
+         
           <Link to="/housing-policy" style={linkStyle("/housing-policy")}>Housing Policy</Link>
           <Link to="/contact" style={linkStyle("/contact")}>Contact</Link>
         </div>

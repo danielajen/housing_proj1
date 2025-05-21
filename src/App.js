@@ -1,5 +1,6 @@
 
 
+
 // import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 // import { useEffect } from "react";
 // import Header from "./components/Header";
@@ -13,6 +14,7 @@
 // import HousingPolicy from "./pages/HousingPolicy";
 // import TenantResources from "./pages/TenantResources";
 // import IndigenousHousing from "./pages/IndigenousHousing";
+// import Donation from "./pages/Donation";
 
 // function App() {
 //   return (
@@ -43,6 +45,7 @@
 //           <Route path="/regional-affordability" element={<RegionalAffordability />} />
 //           <Route path="/tenant-resources" element={<TenantResources />} />
 //           <Route path="/indigenous-housing" element={<IndigenousHousing />} />
+//           <Route path="/donation" element={<Donation />} />
 //         </Routes>
 //       </main>
 //       <Footer />
@@ -51,6 +54,7 @@
 // }
 
 // export default App;
+
 
 
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
@@ -66,7 +70,8 @@ import RegionalAffordability from "./pages/RegionalAffordability";
 import HousingPolicy from "./pages/HousingPolicy";
 import TenantResources from "./pages/TenantResources";
 import IndigenousHousing from "./pages/IndigenousHousing";
-import Donation from "./pages/Donation";
+
+import Chatbot from "./components/Chatbot";
 
 function App() {
   return (
@@ -97,10 +102,11 @@ function AppContent() {
           <Route path="/regional-affordability" element={<RegionalAffordability />} />
           <Route path="/tenant-resources" element={<TenantResources />} />
           <Route path="/indigenous-housing" element={<IndigenousHousing />} />
-          <Route path="/donation" element={<Donation />} />
+          
         </Routes>
       </main>
       <Footer />
+      <Chatbot />
     </>
   );
 }

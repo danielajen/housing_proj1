@@ -1,9 +1,8 @@
-
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-const Stripe = require('stripe');
+
 
 const app = express();
 app.use(cors({
@@ -12,7 +11,6 @@ app.use(cors({
 }));
 app.use(express.json());
 
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 app.post('/api/statcan', async (req, res) => {
   try {
@@ -32,31 +30,6 @@ app.post('/api/statcan', async (req, res) => {
 });
 
 
-app.post('/api/create-checkout-session', async (req, res) => {
-  try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [{
-        price_data: {
-          currency: 'cad',
-          product_data: {
-            name: 'Support Open Housing Data',
-          },
-          unit_amount: 500, 
-        },
-        quantity: 1,
-      }],
-      mode: 'payment',
-      success_url: 'https://glocalfoundation.ca/success',
-      cancel_url: 'https://glocalfoundation.ca/cancel',
-    });
-
-    res.json({ url: session.url });
-  } catch (err) {
-    console.error('Stripe Error:', err);
-    res.status(500).json({ error: 'Stripe session creation failed.' });
-  }
-});
 
 
 const PORT = process.env.PORT || 3001;
